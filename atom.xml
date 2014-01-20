@@ -1,16 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-01-20T13:30:43+08:00</updated>
+  <updated>2014-01-20T13:45:06+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[karidyang]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[优化Jetty]]></title>
+    <link href="http://karidyang.github.io/blog/2014/01/20/optimize-jetty/"/>
+    <updated>2014-01-20T13:41:03+08:00</updated>
+    <id>http://karidyang.github.io/blog/2014/01/20/optimize-jetty</id>
+    <content type="html"><![CDATA[<h2>调整Linux内核参数</h2>
+
+<h5>调整Tcp Buffer Sizes</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>net.core.rmem_max = 16777216
+</span><span class='line'>net.core.wmem_max = 16777216
+</span><span class='line'>net.ipv4.tcp_rmem = 4096 87380 4194304
+</span><span class='line'>net.ipv4.tcp_wmem = 4096 16384 4194304</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>调整Queue Sizes</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>net.core.somaxconn = 4096
+</span><span class='line'>
+</span><span class='line'>net.core.netdev_max_backlog = 16385
+</span><span class='line'>net.ipv4.tcp_max_syn_backlog = 8192
+</span><span class='line'>net.ipv4.tcp_syncookies = 1</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>调整Ports</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>net.ipv4.ip_local_port_range = 1024 65000
+</span><span class='line'>net.ipv4.tcp_tw_recycle = 1</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h2>调整JVM参数</h2>
+
+<hr />
+
+<h2>调整Jetty配置</h2>
+
+<h4>调整Acceptors数量</h4>
+
+<p>大于等于1，小于等于CPU数量</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;Set name="Acceptors"&gt;4&lt;/Set&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>为线程池的阻塞队列设置默认大小</h4>
+
+<p>默认大小的值以每分钟的请求数来计算</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;Set name="ThreadPool"&gt;
+</span><span class='line'>      &lt;!-- Default queued blocking threadpool --&gt;
+</span><span class='line'>      &lt;New class="org.eclipse.jetty.util.thread.QueuedThreadPool"&gt;
+</span><span class='line'>        &lt;Arg&gt;
+</span><span class='line'>          &lt;New class="java.util.concurrent.ArrayBlockingQueue"&gt;
+</span><span class='line'>            &lt;Arg type="int"&gt;6000&lt;/Arg&gt;
+</span><span class='line'>          &lt;/New&gt;
+</span><span class='line'>        &lt;/Arg&gt;
+</span><span class='line'>        &lt;Set name="minThreads"&gt;10&lt;/Set&gt;
+</span><span class='line'>        &lt;Set name="maxThreads"&gt;500&lt;/Set&gt;
+</span><span class='line'>        &lt;Set name="detailedDump"&gt;false&lt;/Set&gt;
+</span><span class='line'>      &lt;/New&gt;
+</span><span class='line'>    &lt;/Set&gt;</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
 </feed>
