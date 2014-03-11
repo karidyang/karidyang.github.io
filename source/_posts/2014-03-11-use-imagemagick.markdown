@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Use ImageMagick"
+title: "使用ImageMagick处理图片"
 date: 2014-03-11 18:06:07 +0800
 comments: true
-categories: 'java'
+categories: java
 ---
 
 

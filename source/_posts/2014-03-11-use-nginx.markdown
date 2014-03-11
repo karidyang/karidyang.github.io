@@ -1,0 +1,42 @@
+---
+layout: post
+title: "使用Nginx的一些心得体会"
+date: 2014-03-11 18:19:10 +0800
+comments: true
+categories: nginx
+---
+
+
+
+####1、安装Nginx
+在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。
+
+首先需要下载源码包，可以在这里下载[nginx](http://nginx.org/download/nginx-1.4.2.tar.gz)
+
+下载之后就需要安装。
+
+
+	tar -zxvf nginx-1.4.2.tar.gz
+	cd nginx-1.4.2
+	./configure --prefix=/usr/local/nginx_8080 --user=www --group=www  --with-http_stub_status_module --without-http_fastcgi_module --without-http_autoindex_module --without-http_ssi_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module  --without-http_memcached_module
+	make
+	make  install
+
+
+
+说明：
+
+--prefix : 安装目录<br/>
+--user: linux中的用户<br/>
+--group: linux中的用户组<br/>
+--with-http_stub_status_module : 安装http_status模块<br/>
+--without-http_fastcgi_module : 如不需要后端接入php、asp等可以不安装fastcgi模块<br/>
+--without-http_autoindex_module : 不安装文件目录索引模块<br/>
+--without-http_ssi_module : 不安装https模块<br/>
+--without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module : 不安装mail模块<br/>
+--without-http_memcached_module : 不安装memcached模块<br/>
+
+编译以后，会在安装目录下找到conf目录，我们后面的主要配置就是编辑这个目录下的nginx.conf文件。
+
+
+####2、配置
