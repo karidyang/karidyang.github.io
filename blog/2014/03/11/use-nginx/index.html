@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - karidyang的技术博客</title>
+  <title>使用Nginx的一些心得体会 - karidyang的技术博客</title>
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="Blog Archive 2014 使用Nginx的一些心得体会
-Mar 11 2014 posted in nginx 使用ImageMagick处理图片
-Mar 11 2014 posted in java 优化Jetty
-Jan 20 2014 posted in Jetty Recent &hellip;">
+  <meta name="description" content="1、安装Nginx 在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。 首先需要下载源码包，可以在这里下载nginx 下载之后就需要安装。 tar -zxvf nginx-1.4.2.tar &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Jan 20 2014 posted in Jetty Recent &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://karidyang.github.io/blog/archives">
+  <link rel="canonical" href="http://karidyang.github.io/blog/2014/03/11/use-nginx">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
@@ -65,63 +62,117 @@ Jan 20 2014 posted in Jetty Recent &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">使用Nginx的一些心得体会</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-11T18:19:10+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><h4>1、安装Nginx</h4>
 
-  
-  <h2>2014</h2>
+<p>在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。</p>
 
-<article>
-  
-<h1><a href="/blog/2014/03/11/use-nginx/">使用Nginx的一些心得体会</a></h1>
-<time datetime="2014-03-11T18:19:10+08:00" pubdate><span class='month'>Mar</span> <span class='day'>11</span> <span class='year'>2014</span></time>
+<p>首先需要下载源码包，可以在这里下载<a href="http://nginx.org/download/nginx-1.4.2.tar.gz">nginx</a></p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/nginx/'>nginx</a></span>
-</footer>
+<p>下载之后就需要安装。</p>
 
+<pre><code>tar -zxvf nginx-1.4.2.tar.gz
+cd nginx-1.4.2
+./configure --prefix=/usr/local/nginx_8080 --user=www --group=www  --with-http_stub_status_module --without-http_fastcgi_module --without-http_autoindex_module --without-http_ssi_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module  --without-http_memcached_module
+make
+make  install
+</code></pre>
 
-</article>
+<p>说明：</p>
 
+<p>&mdash;prefix : 安装目录<br/>
+&mdash;user: linux中的用户<br/>
+&mdash;group: linux中的用户组<br/>
+&mdash;with-http_stub_status_module : 安装http_status模块<br/>
+&mdash;without-http_fastcgi_module : 如不需要后端接入php、asp等可以不安装fastcgi模块<br/>
+&mdash;without-http_autoindex_module : 不安装文件目录索引模块<br/>
+&mdash;without-http_ssi_module : 不安装https模块<br/>
+&mdash;without-mail_pop3_module &mdash;without-mail_imap_module &mdash;without-mail_smtp_module : 不安装mail模块<br/>
+&mdash;without-http_memcached_module : 不安装memcached模块<br/></p>
 
+<p>编译以后，会在安装目录下找到conf目录，我们后面的主要配置就是编辑这个目录下的nginx.conf文件。</p>
 
-<article>
-  
-<h1><a href="/blog/2014/03/11/use-imagemagick/">使用ImageMagick处理图片</a></h1>
-<time datetime="2014-03-11T18:06:07+08:00" pubdate><span class='month'>Mar</span> <span class='day'>11</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>java</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2014/01/20/optimize-jetty/">优化Jetty</a></h1>
-<time datetime="2014-01-20T13:41:03+08:00" pubdate><span class='month'>Jan</span> <span class='day'>20</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/jetty/'>Jetty</a></span>
-</footer>
-
-
-</article>
-
+<h4>2、配置</h4>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">karidyang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-11T18:19:10+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/nginx/'>nginx</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://karidyang.github.io/blog/2014/03/11/use-nginx/" data-via="karidyang" data-counturl="http://karidyang.github.io/blog/2014/03/11/use-nginx/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/03/11/use-imagemagick/" title="Previous Post: 使用ImageMagick处理图片">&laquo; 使用ImageMagick处理图片</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>

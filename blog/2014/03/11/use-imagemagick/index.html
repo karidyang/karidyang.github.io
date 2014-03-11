@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - karidyang的技术博客</title>
+  <title>使用ImageMagick处理图片 - karidyang的技术博客</title>
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="Blog Archive 2014 使用Nginx的一些心得体会
-Mar 11 2014 posted in nginx 使用ImageMagick处理图片
-Mar 11 2014 posted in java 优化Jetty
-Jan 20 2014 posted in Jetty Recent &hellip;">
+  <meta name="description" content="在处理图片的过程中，一般都会使用ImageMagick，下面我来介绍下如何在CentOS系统中安装ImageMagick。 首先必须查看下系统是否已安装了ImageMagick identify -version 如果已安装，那么先卸载掉旧版本 yum remove ImageMagick &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Jan 20 2014 posted in Jetty Recent &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://karidyang.github.io/blog/archives">
+  <link rel="canonical" href="http://karidyang.github.io/blog/2014/03/11/use-imagemagick">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
@@ -65,63 +62,169 @@ Jan 20 2014 posted in Jetty Recent &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">使用ImageMagick处理图片</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-11T18:06:07+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>在处理图片的过程中，一般都会使用ImageMagick，下面我来介绍下如何在CentOS系统中安装ImageMagick。</p>
 
-  
-  <h2>2014</h2>
+<p>首先必须查看下系统是否已安装了ImageMagick</p>
 
-<article>
-  
-<h1><a href="/blog/2014/03/11/use-nginx/">使用Nginx的一些心得体会</a></h1>
-<time datetime="2014-03-11T18:19:10+08:00" pubdate><span class='month'>Mar</span> <span class='day'>11</span> <span class='year'>2014</span></time>
+<pre><code>identify -version
+</code></pre>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/nginx/'>nginx</a></span>
-</footer>
+<p>如果已安装，那么先卸载掉旧版本</p>
 
+<pre><code>yum remove ImageMagick
+</code></pre>
 
-</article>
+<p>然后下载安装源文件</p>
 
+<pre><code>cd /usr/local/src/; wget ftp://mirror.aarnet.edu.au/pub/imagemagick/    ImageMagick-6.8.7-9.tar.gz
+</code></pre>
 
+<p>解压</p>
 
-<article>
-  
-<h1><a href="/blog/2014/03/11/use-imagemagick/">使用ImageMagick处理图片</a></h1>
-<time datetime="2014-03-11T18:06:07+08:00" pubdate><span class='month'>Mar</span> <span class='day'>11</span> <span class='year'>2014</span></time>
+<pre><code>tar zxvf ImageMagick-6.8.7-9.tar.gz
+</code></pre>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/java/'>java</a></span>
-</footer>
+<p>编译</p>
 
+<pre><code>cd ImageMagick-6.8.7-9
+./configure
+make 
+make install
+ldconfig /usr/local/lib
+</code></pre>
 
-</article>
+<p>最后使用命令测试</p>
 
+<pre><code>convert logo: logo.gif
+</code></pre>
 
+<h6>在Java中的使用</h6>
 
-<article>
-  
-<h1><a href="/blog/2014/01/20/optimize-jetty/">优化Jetty</a></h1>
-<time datetime="2014-01-20T13:41:03+08:00" pubdate><span class='month'>Jan</span> <span class='day'>20</span> <span class='year'>2014</span></time>
+<p>在java中要使用ImageMagick的话，必须要引入一个jar包，它就是im4java-1.4.0.jar，使用maven的同学，可以直接使用</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/jetty/'>Jetty</a></span>
-</footer>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.im4java&lt;/groupId&gt;
+    &lt;artifactId&gt;im4java&lt;/artifactId&gt;
+    &lt;version&gt;1.4.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
 
+<p>直接上代码说明比较方便</p>
 
-</article>
+<pre><code>public class ImageUtils {
+    private ConvertCmd cmd = new ConvertCmd();
+        private ImageUtils() {
+        // Windows下需要以下配置
+        // ImageMagick在windows中的安装目录
+        String im = "C:\\Program Files\\ImageMagick-6.8.7-Q16"
+        ProcessStarter.setGlobalSearchPath(im);
+    }
 
+    //缩放
+    public void resize(Integer width, Integer height, String src, String dst) throws Exception {
+        IMOperation imop = new IMOperation();
+        imop.addImage(src);
+        imop.resize(width, height);
+        imop.addImage(dst);
+        cmd.run(imop);
+
+    }
+
+    //剪裁
+    public void crop(String dst,Integer srcWidth, Integer srcHeight, Integer newWidth, Integer newHeight) throws Exception {
+        IMOperation imop = new IMOperation();
+        imop.addImage(dst);
+        imop.crop(srcWidth, srcHeight, newWidth, newHeight);
+        imop.addImage(dst);
+        cmd.run(imop);
+
+    }
+</code></pre>
+
+<p>更多功能还请参考官方文档.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">karidyang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-11T18:06:07+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://karidyang.github.io/blog/2014/03/11/use-imagemagick/" data-via="karidyang" data-counturl="http://karidyang.github.io/blog/2014/03/11/use-imagemagick/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/20/optimize-jetty/" title="Previous Post: 优化Jetty">&laquo; 优化Jetty</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/11/use-nginx/" title="Next Post: 使用Nginx的一些心得体会">使用Nginx的一些心得体会 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
 </div>
