@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-03-11T18:24:48+08:00</updated>
+  <updated>2014-07-24T15:42:22+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,221 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Develop Weixin Web Server]]></title>
+    <link href="http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server/"/>
+    <updated>2014-06-03T09:40:49+08:00</updated>
+    <id>http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server</id>
+    <content type="html"><![CDATA[<p>最近做了一个微信的商户平台，有些心得，和大家分享一下。</p>
+
+<h3>一、申请帐号</h3>
+
+<p>首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元/年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看<a href="https://open.weixin.qq.com/cgi-bin/frame?t=resource/res_main_tmpl&lang=zh_CN">微信公众平台开发者文档</a>。</p>
+
+<h3>二、接入</h3>
+
+<h6>1、申请消息接口</h6>
+
+<p>在公众平台网站的高级功能 – 开发模式页，点击“成为开发者”按钮，填写URL和Token，其中URL是开发者用来接收微信服务器数据的接口URL。Token可由开发者任意填写，用作生成签名（该Token会和接口URL中包含的Token进行比对，从而验证安全性）。</p>
+
+<h6>2、验证URL有效性</h6>
+
+<p>微信服务器会对你刚才填的URL做GET请求，并带上下面4个参数</p>
+
+<table>
+<thead>
+<tr>
+<td>参数</td>
+<td>描述</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>signature</td>
+<td>微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>时间戳</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>随机数</td>
+</tr>
+<tr>
+<td>echostr</td>
+<td>随机字符串</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>开发者通过检验signature对请求进行校验（下面有校验方式）。若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>加密/校验流程如下：
+</span><span class='line'>1. 将token、timestamp、nonce三个参数进行字典序排序
+</span><span class='line'>2. 将三个参数字符串拼接成一个字符串进行sha1加密
+</span><span class='line'>3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信</span></code></pre></td></tr></table></div></figure>
+
+
+<p>检验signature的Java示例代码:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>/**
+</span><span class='line'> * 签名校验工具类
+</span><span class='line'> * Created by karidyang on 14-2-23.
+</span><span class='line'> */
+</span><span class='line'>public class SignUtils {
+</span><span class='line'>    public static final String TOKEN = "";
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * 验证签名
+</span><span class='line'>     * @param signature 签名
+</span><span class='line'>     * @param timestamp 时间戳
+</span><span class='line'>     * @param nonce 随机码
+</span><span class='line'>     * @return 校验是否成功
+</span><span class='line'>     */
+</span><span class='line'>    public static boolean checkSign(String signature, String timestamp, String nonce) {
+</span><span class='line'>        if (signature == null) {
+</span><span class='line'>            return false;
+</span><span class='line'>        }
+</span><span class='line'>        try {
+</span><span class='line'>            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+</span><span class='line'>
+</span><span class='line'>            String[] arr = new String[] { TOKEN, timestamp, nonce };
+</span><span class='line'>            Arrays.sort(arr);
+</span><span class='line'>            String str = StringUtils.join(arr,"");
+</span><span class='line'>            byte[] digest = messageDigest.digest(str.getBytes());
+</span><span class='line'>            String tmpStr = byteToStr(digest);
+</span><span class='line'>            return tmpStr != null && tmpStr.equals(signature.toUpperCase());
+</span><span class='line'>
+</span><span class='line'>        } catch (NoSuchAlgorithmException e) {
+</span><span class='line'>            e.printStackTrace();
+</span><span class='line'>        }
+</span><span class='line'>
+</span><span class='line'>        return false;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * 将字节数组转换为十六进制字符串
+</span><span class='line'>     *
+</span><span class='line'>     * @param byteArray
+</span><span class='line'>     * @return
+</span><span class='line'>     */
+</span><span class='line'>    private static String byteToStr(byte[] byteArray) {
+</span><span class='line'>        String strDigest = "";
+</span><span class='line'>        for (int i = 0; i &lt; byteArray.length; i++) {
+</span><span class='line'>            strDigest += byteToHexStr(byteArray[i]);
+</span><span class='line'>        }
+</span><span class='line'>        return strDigest;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    /**
+</span><span class='line'>     * 将字节转换为十六进制字符串
+</span><span class='line'>     *
+</span><span class='line'>     * @param mByte
+</span><span class='line'>     * @return
+</span><span class='line'>     */
+</span><span class='line'>    private static String byteToHexStr(byte mByte) {
+</span><span class='line'>        char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+</span><span class='line'>        char[] tempArr = new char[2];
+</span><span class='line'>        tempArr[0] = Digit[(mByte &gt;&gt;&gt; 4) & 0X0F];
+</span><span class='line'>        tempArr[1] = Digit[mByte & 0X0F];
+</span><span class='line'>
+</span><span class='line'>        String s = new String(tempArr);
+</span><span class='line'>        return s;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h6>3、成为开发者</h6>
+
+<p>验证URL有效性成功后即接入生效，成为开发者。如果公众号类型为服务号（订阅号只能使用普通消息接口），可以在公众平台网站中申请认证，认证成功的服务号将获得众多接口权限，以满足开发者需求。</p>
+
+<p>此后用户每次向公众号发送消息、或者产生自定义菜单点击事件时，响应URL将得到推送。</p>
+
+<p>公众号调用各接口时，一般会获得正确的结果，具体结果可见对应接口的说明。返回错误时，可根据返回码来查询错误原因。全局返回码说明</p>
+
+<p>用户向公众号发送消息时，公众号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众号有一个唯一的OpenID。</p>
+
+<p>此外请注意，微信公众号接口只支持80接口。</p>
+
+<h3>三、设置菜单</h3>
+
+<p>未完待续。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用Nginx的一些心得体会]]></title>
