@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rails | karidyang的技术博客]]></title>
+  <link href="http://karidyang.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://karidyang.github.io/"/>
+  <updated>2014-08-04T21:14:00+08:00</updated>
+  <id>http://karidyang.github.io/</id>
+  <author>
+    <name><![CDATA[karidyang]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA['Deploy Rails Production']]></title>
+    <link href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production/"/>
+    <updated>2014-08-04T21:12:01+08:00</updated>
+    <id>http://karidyang.github.io/blog/2014/08/04/deploy-rails-production</id>
+    <content type="html"><![CDATA[<h2>部署rails生产环境</h2>
+
+<h5>1、添加Gem</h5>
+
+<p><code>
+gem 'unicorn'
+gem 'execjs'
+</code></p>
+
+<h5>2、添加unicorn的配置文件</h5>
+
+<p><code>
+touch config/unicorn.conf
+vi config/unicorn.conf
+rails_env = ENV['RAILS_ENV'] || 'production'
+user 'root'
+worker_processes 2
+preload_app true
+timeout 30
+listen 3009
+working_directory "/www/htdocs/weixin_backend"
+pid "/www/htdocs/weixin_backend/unicorn.pid"
+stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
+stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"
+</code></p>
+
+<h5>3、添加启动脚本</h5>
+
+<p><code>
+unicorn_rails -E production -c config/unicorn.rb -D
+</code></p>
+
+<h5>4、启动之前需要先执行</h5>
+
+<p><code>
+rake assets/precompile
+</code></p>
+
+<h5>5、配置nginx</h5>
+
+<p>```
+location /assets
+{</p>
+
+<pre><code>root /www/htdocs/weixin_backend/public;
+</code></pre>
+
+<p>}
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

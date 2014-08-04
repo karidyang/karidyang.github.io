@@ -5,11 +5,27 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>使用Nginx的一些心得体会 - karidyang的技术博客</title>
+  <title>'Deploy Rails Production' - karidyang的技术博客</title>
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="1、安装Nginx 在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。 首先需要下载源码包，可以在这里下载nginx 下载之后就需要安装。 tar -zxvf nginx-1.4.2.tar &hellip;">
+  <meta name="description" content="部署rails生产环境 1、添加Gem 1
+2
+gem 'unicorn'
+gem 'execjs' 2、添加unicorn的配置文件 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+touch config/unicorn.conf
+vi config/unicorn.conf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +34,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://karidyang.github.io/blog/2014/03/11/use-nginx">
+  <link rel="canonical" href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
@@ -66,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">使用Nginx的一些心得体会</h1>
+      <h1 class="entry-title">'Deploy Rails Production'</h1>
     
     
       <p class="meta">
@@ -82,43 +98,74 @@
   
 
 
-<time datetime="2014-03-11T18:19:10+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+<time datetime="2014-08-04T21:12:01+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h4>1、安装Nginx</h4>
+<div class="entry-content"><h2>部署rails生产环境</h2>
 
-<p>在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。</p>
+<h5>1、添加Gem</h5>
 
-<p>首先需要下载源码包，可以在这里下载<a href="http://nginx.org/download/nginx-1.4.2.tar.gz">nginx</a></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'unicorn'
+</span><span class='line'>gem 'execjs'</span></code></pre></td></tr></table></div></figure>
 
-<p>下载之后就需要安装。</p>
 
-<pre><code>tar -zxvf nginx-1.4.2.tar.gz
-cd nginx-1.4.2
-./configure --prefix=/usr/local/nginx_8080 --user=www --group=www  --with-http_stub_status_module --without-http_fastcgi_module --without-http_autoindex_module --without-http_ssi_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module  --without-http_memcached_module
-make
-make  install
-</code></pre>
+<h5>2、添加unicorn的配置文件</h5>
 
-<p>说明：</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>touch config/unicorn.conf
+</span><span class='line'>vi config/unicorn.conf
+</span><span class='line'>rails_env = ENV['RAILS_ENV'] || 'production'
+</span><span class='line'>user 'root'
+</span><span class='line'>worker_processes 2
+</span><span class='line'>preload_app true
+</span><span class='line'>timeout 30
+</span><span class='line'>listen 3009
+</span><span class='line'>working_directory "/www/htdocs/weixin_backend"
+</span><span class='line'>pid "/www/htdocs/weixin_backend/unicorn.pid"
+</span><span class='line'>stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
+</span><span class='line'>stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"</span></code></pre></td></tr></table></div></figure>
 
-<p>&mdash;prefix : 安装目录<br/>
-&mdash;user: linux中的用户<br/>
-&mdash;group: linux中的用户组<br/>
-&mdash;with-http_stub_status_module : 安装http_status模块<br/>
-&mdash;without-http_fastcgi_module : 如不需要后端接入php、asp等可以不安装fastcgi模块<br/>
-&mdash;without-http_autoindex_module : 不安装文件目录索引模块<br/>
-&mdash;without-http_ssi_module : 不安装https模块<br/>
-&mdash;without-mail_pop3_module &mdash;without-mail_imap_module &mdash;without-mail_smtp_module : 不安装mail模块<br/>
-&mdash;without-http_memcached_module : 不安装memcached模块<br/></p>
 
-<p>编译以后，会在安装目录下找到conf目录，我们后面的主要配置就是编辑这个目录下的nginx.conf文件。</p>
+<h5>3、添加启动脚本</h5>
 
-<h4>2、配置</h4>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>unicorn_rails -E production -c config/unicorn.rb -D</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>4、启动之前需要先执行</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake assets/precompile</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>5、配置nginx</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location /assets 
+</span><span class='line'>{
+</span><span class='line'>  root /www/htdocs/weixin_backend/public;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
@@ -141,12 +188,12 @@ make  install
   
 
 
-<time datetime="2014-03-11T18:19:10+08:00" pubdate data-updated="true">Mar 11<span>th</span>, 2014</time>
+<time datetime="2014-08-04T21:12:01+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/nginx/'>nginx</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>
   
 </span>
 
@@ -162,10 +209,8 @@ make  install
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/03/11/use-imagemagick/" title="Previous Post: 使用ImageMagick处理图片">&laquo; 使用ImageMagick处理图片</a>
+        <a class="basic-alignment left" href="/blog/2014/06/03/develop-weixin-web-server/" title="Previous Post: develop weixin web server">&laquo; develop weixin web server</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/06/03/develop-weixin-web-server/" title="Next Post: develop weixin web server">develop weixin web server &raquo;</a>
       
     </p>
   </footer>

@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-07-24T18:19:03+08:00</updated>
+  <updated>2014-08-04T21:14:00+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA['Deploy Rails Production']]></title>
+    <link href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production/"/>
+    <updated>2014-08-04T21:12:01+08:00</updated>
+    <id>http://karidyang.github.io/blog/2014/08/04/deploy-rails-production</id>
+    <content type="html"><![CDATA[<h2>部署rails生产环境</h2>
+
+<h5>1、添加Gem</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'unicorn'
+</span><span class='line'>gem 'execjs'</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2、添加unicorn的配置文件</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>touch config/unicorn.conf
+</span><span class='line'>vi config/unicorn.conf
+</span><span class='line'>rails_env = ENV['RAILS_ENV'] || 'production'
+</span><span class='line'>user 'root'
+</span><span class='line'>worker_processes 2
+</span><span class='line'>preload_app true
+</span><span class='line'>timeout 30
+</span><span class='line'>listen 3009
+</span><span class='line'>working_directory "/www/htdocs/weixin_backend"
+</span><span class='line'>pid "/www/htdocs/weixin_backend/unicorn.pid"
+</span><span class='line'>stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
+</span><span class='line'>stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>3、添加启动脚本</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>unicorn_rails -E production -c config/unicorn.rb -D</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>4、启动之前需要先执行</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake assets/precompile</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>5、配置nginx</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location /assets 
+</span><span class='line'>{
+</span><span class='line'>  root /www/htdocs/weixin_backend/public;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Develop Weixin Web Server]]></title>

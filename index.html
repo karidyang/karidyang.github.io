@@ -9,7 +9,23 @@
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="最近做了一个微信的商户平台，有些心得，和大家分享一下。 一、申请帐号 首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元/年的认证费（有点坑啊，一年交一次）。具体的接口文档， &hellip;">
+  <meta name="description" content="部署rails生产环境 1、添加Gem 1
+2
+gem 'unicorn'
+gem 'execjs' 2、添加unicorn的配置文件 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+touch config/unicorn.conf
+vi config/unicorn.conf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -63,6 +79,102 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/04/deploy-rails-production/">&#8216;Deploy Rails Production&#8217;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-04T21:12:01+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>部署rails生产环境</h2>
+
+<h5>1、添加Gem</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'unicorn'
+</span><span class='line'>gem 'execjs'</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>2、添加unicorn的配置文件</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>touch config/unicorn.conf
+</span><span class='line'>vi config/unicorn.conf
+</span><span class='line'>rails_env = ENV['RAILS_ENV'] || 'production'
+</span><span class='line'>user 'root'
+</span><span class='line'>worker_processes 2
+</span><span class='line'>preload_app true
+</span><span class='line'>timeout 30
+</span><span class='line'>listen 3009
+</span><span class='line'>working_directory "/www/htdocs/weixin_backend"
+</span><span class='line'>pid "/www/htdocs/weixin_backend/unicorn.pid"
+</span><span class='line'>stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
+</span><span class='line'>stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>3、添加启动脚本</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>unicorn_rails -E production -c config/unicorn.rb -D</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>4、启动之前需要先执行</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake assets/precompile</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>5、配置nginx</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>location /assets 
+</span><span class='line'>{
+</span><span class='line'>  root /www/htdocs/weixin_backend/public;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -615,6 +727,10 @@ ldconfig /usr/local/lib
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/04/deploy-rails-production/">&#8216;Deploy Rails Production&#8217;</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/06/03/develop-weixin-web-server/">Develop Weixin Web Server</a>
