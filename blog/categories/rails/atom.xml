@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-08-04T21:14:00+08:00</updated>
+  <updated>2014-08-04T21:15:30+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -14,13 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA['Deploy Rails Production']]></title>
+    <title type="html"><![CDATA[部署rails生产环境]]></title>
     <link href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production/"/>
     <updated>2014-08-04T21:12:01+08:00</updated>
     <id>http://karidyang.github.io/blog/2014/08/04/deploy-rails-production</id>
-    <content type="html"><![CDATA[<h2>部署rails生产环境</h2>
-
-<h5>1、添加Gem</h5>
+    <content type="html"><![CDATA[<h5>1、添加Gem</h5>
 
 <p><code>
 gem 'unicorn'
