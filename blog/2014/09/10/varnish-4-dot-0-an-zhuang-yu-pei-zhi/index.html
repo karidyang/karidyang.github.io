@@ -1,24 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[karidyang的技术博客]]></title>
-  <link href="http://karidyang.github.io/atom.xml" rel="self"/>
-  <link href="http://karidyang.github.io/"/>
-  <updated>2014-09-12T11:25:47+08:00</updated>
-  <id>http://karidyang.github.io/</id>
-  <author>
-    <name><![CDATA[karidyang]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>'Varnish 4.0 安装与配置' - karidyang的技术博客</title>
+  <meta name="author" content="karidyang">
 
   
-  <entry>
-    <title type="html"><![CDATA['Varnish 4.0 安装与配置']]></title>
-    <link href="http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/"/>
-    <updated>2014-09-10T11:44:42+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi</id>
-    <content type="html"><![CDATA[<h5>Varnish简介</h5>
+  <meta name="description" content="Varnish简介 Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。 安装 我们这里只将如何以源码在CentOS上安装，其他方式请参考官方文档 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!-- <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">karidyang的技术博客</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:karidyang.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">'Varnish 4.0 安装与配置'</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-10T11:44:42+08:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h5>Varnish简介</h5>
 
 <p>Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。</p>
 
@@ -626,506 +697,118 @@
 
 
 <p>可以看出，使用Varnish后，性能有所提升。</p>
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-  <entry>
-    <title type="html"><![CDATA[部署rails生产环境]]></title>
-    <link href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production/"/>
-    <updated>2014-08-04T21:12:01+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/08/04/deploy-rails-production</id>
-    <content type="html"><![CDATA[<h5>1、添加Gem</h5>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'unicorn'
-</span><span class='line'>gem 'execjs'</span></code></pre></td></tr></table></div></figure>
+<span class="byline author vcard">Posted by <span class="fn">karidyang</span></span>
+
+      
 
 
-<h5>2、添加unicorn的配置文件</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>touch config/unicorn.conf
-</span><span class='line'>vi config/unicorn.conf
-</span><span class='line'>rails_env = ENV['RAILS_ENV'] || 'production'
-</span><span class='line'>user 'root'
-</span><span class='line'>worker_processes 2
-</span><span class='line'>preload_app true
-</span><span class='line'>timeout 30
-</span><span class='line'>listen 3009
-</span><span class='line'>working_directory "/www/htdocs/weixin_backend"
-</span><span class='line'>pid "/www/htdocs/weixin_backend/unicorn.pid"
-</span><span class='line'>stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
-</span><span class='line'>stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>3、添加启动脚本</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>unicorn_rails -E production -c config/unicorn.rb -D</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>4、启动之前需要先执行</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake assets/precompile</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>5、配置nginx</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>location /assets 
-</span><span class='line'>{
-</span><span class='line'>  root /www/htdocs/weixin_backend/public;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
   
-  <entry>
-    <title type="html"><![CDATA[开发微信服务器]]></title>
-    <link href="http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server/"/>
-    <updated>2014-06-03T09:40:49+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server</id>
-    <content type="html"><![CDATA[<p>最近做了一个微信的商户平台，有些心得，和大家分享一下。</p>
-
-<h3>一、申请帐号</h3>
-
-<p>首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元/年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看<a href="https://open.weixin.qq.com/cgi-bin/frame?t=resource/res_main_tmpl&lang=zh_CN">微信公众平台开发者文档</a>。</p>
-
-<h3>二、接入</h3>
-
-<h6>1、申请消息接口</h6>
-
-<p>在公众平台网站的高级功能 – 开发模式页，点击“成为开发者”按钮，填写URL和Token，其中URL是开发者用来接收微信服务器数据的接口URL。Token可由开发者任意填写，用作生成签名（该Token会和接口URL中包含的Token进行比对，从而验证安全性）。</p>
-
-<h6>2、验证URL有效性</h6>
-
-<p>微信服务器会对你刚才填的URL做GET请求，并带上下面4个参数</p>
-
-<table>
-<thead>
-<tr>
-<td>参数</td>
-<td>描述</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>signature</td>
-<td>微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。</td>
-</tr>
-<tr>
-<td>timestamp</td>
-<td>时间戳</td>
-</tr>
-<tr>
-<td>nonce</td>
-<td>随机数</td>
-</tr>
-<tr>
-<td>echostr</td>
-<td>随机字符串</td>
-</tr>
-</tbody>
-</table>
 
 
-<p>开发者通过检验signature对请求进行校验（下面有校验方式）。若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。</p>
+<time datetime="2014-09-10T11:44:42+08:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
+      
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>加密/校验流程如下：
-</span><span class='line'>1. 将token、timestamp、nonce三个参数进行字典序排序
-</span><span class='line'>2. 将三个参数字符串拼接成一个字符串进行sha1加密
-</span><span class='line'>3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信</span></code></pre></td></tr></table></div></figure>
-
-
-<p>检验signature的Java示例代码:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>/**
-</span><span class='line'> * 签名校验工具类
-</span><span class='line'> * Created by karidyang on 14-2-23.
-</span><span class='line'> */
-</span><span class='line'>public class SignUtils {
-</span><span class='line'>    public static final String TOKEN = "";
-</span><span class='line'>
-</span><span class='line'>    /**
-</span><span class='line'>     * 验证签名
-</span><span class='line'>     * @param signature 签名
-</span><span class='line'>     * @param timestamp 时间戳
-</span><span class='line'>     * @param nonce 随机码
-</span><span class='line'>     * @return 校验是否成功
-</span><span class='line'>     */
-</span><span class='line'>    public static boolean checkSign(String signature, String timestamp, String nonce) {
-</span><span class='line'>        if (signature == null) {
-</span><span class='line'>            return false;
-</span><span class='line'>        }
-</span><span class='line'>        try {
-</span><span class='line'>            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-</span><span class='line'>
-</span><span class='line'>            String[] arr = new String[] { TOKEN, timestamp, nonce };
-</span><span class='line'>            Arrays.sort(arr);
-</span><span class='line'>            String str = StringUtils.join(arr,"");
-</span><span class='line'>            byte[] digest = messageDigest.digest(str.getBytes());
-</span><span class='line'>            String tmpStr = byteToStr(digest);
-</span><span class='line'>            return tmpStr != null && tmpStr.equals(signature.toUpperCase());
-</span><span class='line'>
-</span><span class='line'>        } catch (NoSuchAlgorithmException e) {
-</span><span class='line'>            e.printStackTrace();
-</span><span class='line'>        }
-</span><span class='line'>
-</span><span class='line'>        return false;
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    /**
-</span><span class='line'>     * 将字节数组转换为十六进制字符串
-</span><span class='line'>     *
-</span><span class='line'>     * @param byteArray
-</span><span class='line'>     * @return
-</span><span class='line'>     */
-</span><span class='line'>    private static String byteToStr(byte[] byteArray) {
-</span><span class='line'>        String strDigest = "";
-</span><span class='line'>        for (int i = 0; i &lt; byteArray.length; i++) {
-</span><span class='line'>            strDigest += byteToHexStr(byteArray[i]);
-</span><span class='line'>        }
-</span><span class='line'>        return strDigest;
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    /**
-</span><span class='line'>     * 将字节转换为十六进制字符串
-</span><span class='line'>     *
-</span><span class='line'>     * @param mByte
-</span><span class='line'>     * @return
-</span><span class='line'>     */
-</span><span class='line'>    private static String byteToHexStr(byte mByte) {
-</span><span class='line'>        char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-</span><span class='line'>        char[] tempArr = new char[2];
-</span><span class='line'>        tempArr[0] = Digit[(mByte &gt;&gt;&gt; 4) & 0X0F];
-</span><span class='line'>        tempArr[1] = Digit[mByte & 0X0F];
-</span><span class='line'>
-</span><span class='line'>        String s = new String(tempArr);
-</span><span class='line'>        return s;
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h6>3、成为开发者</h6>
-
-<p>验证URL有效性成功后即接入生效，成为开发者。如果公众号类型为服务号（订阅号只能使用普通消息接口），可以在公众平台网站中申请认证，认证成功的服务号将获得众多接口权限，以满足开发者需求。</p>
-
-<p>此后用户每次向公众号发送消息、或者产生自定义菜单点击事件时，响应URL将得到推送。</p>
-
-<p>公众号调用各接口时，一般会获得正确的结果，具体结果可见对应接口的说明。返回错误时，可根据返回码来查询错误原因。全局返回码说明</p>
-
-<p>用户向公众号发送消息时，公众号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众号有一个唯一的OpenID。</p>
-
-<p>此外请注意，微信公众号接口只支持80接口。</p>
-
-<h3>三、设置菜单</h3>
-
-<p>微信设置菜单的方式比较简单，就是POST一个JSON格式的菜单数据到微信服务器就行了，只是不同的菜单按钮对应不同的功能，比如可点击的，或者执行某项请求的，或者是跳转的。</p>
-]]></content>
-  </entry>
+<span class="categories">
   
-  <entry>
-    <title type="html"><![CDATA[使用Nginx的一些心得体会]]></title>
-    <link href="http://karidyang.github.io/blog/2014/03/11/use-nginx/"/>
-    <updated>2014-03-11T18:19:10+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/03/11/use-nginx</id>
-    <content type="html"><![CDATA[<h4>1、安装Nginx</h4>
-
-<p>在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。</p>
-
-<p>首先需要下载源码包，可以在这里下载<a href="http://nginx.org/download/nginx-1.4.2.tar.gz">nginx</a></p>
-
-<p>下载之后就需要安装。</p>
-
-<pre><code>tar -zxvf nginx-1.4.2.tar.gz
-cd nginx-1.4.2
-./configure --prefix=/usr/local/nginx_8080 --user=www --group=www  --with-http_stub_status_module --without-http_fastcgi_module --without-http_autoindex_module --without-http_ssi_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module  --without-http_memcached_module
-make
-make  install
-</code></pre>
-
-<p>说明：</p>
-
-<p>&mdash;prefix : 安装目录<br/>
-&mdash;user: linux中的用户<br/>
-&mdash;group: linux中的用户组<br/>
-&mdash;with-http_stub_status_module : 安装http_status模块<br/>
-&mdash;without-http_fastcgi_module : 如不需要后端接入php、asp等可以不安装fastcgi模块<br/>
-&mdash;without-http_autoindex_module : 不安装文件目录索引模块<br/>
-&mdash;without-http_ssi_module : 不安装https模块<br/>
-&mdash;without-mail_pop3_module &mdash;without-mail_imap_module &mdash;without-mail_smtp_module : 不安装mail模块<br/>
-&mdash;without-http_memcached_module : 不安装memcached模块<br/></p>
-
-<p>编译以后，会在安装目录下找到conf目录，我们后面的主要配置就是编辑这个目录下的nginx.conf文件。</p>
-
-<h4>2、配置</h4>
-]]></content>
-  </entry>
+    <a class='category' href='/blog/categories/varnish/'>varnish</a>
   
-  <entry>
-    <title type="html"><![CDATA[使用ImageMagick处理图片]]></title>
-    <link href="http://karidyang.github.io/blog/2014/03/11/use-imagemagick/"/>
-    <updated>2014-03-11T18:06:07+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/03/11/use-imagemagick</id>
-    <content type="html"><![CDATA[<p>在处理图片的过程中，一般都会使用ImageMagick，下面我来介绍下如何在CentOS系统中安装ImageMagick。</p>
+</span>
 
-<p>首先必须查看下系统是否已安装了ImageMagick</p>
 
-<pre><code>identify -version
-</code></pre>
-
-<p>如果已安装，那么先卸载掉旧版本</p>
-
-<pre><code>yum remove ImageMagick
-</code></pre>
-
-<p>然后下载安装源文件</p>
-
-<pre><code>cd /usr/local/src/; wget ftp://mirror.aarnet.edu.au/pub/imagemagick/    ImageMagick-6.8.7-9.tar.gz
-</code></pre>
-
-<p>解压</p>
-
-<pre><code>tar zxvf ImageMagick-6.8.7-9.tar.gz
-</code></pre>
-
-<p>编译</p>
-
-<pre><code>cd ImageMagick-6.8.7-9
-./configure
-make 
-make install
-ldconfig /usr/local/lib
-</code></pre>
-
-<p>最后使用命令测试</p>
-
-<pre><code>convert logo: logo.gif
-</code></pre>
-
-<h6>在Java中的使用</h6>
-
-<p>在java中要使用ImageMagick的话，必须要引入一个jar包，它就是im4java-1.4.0.jar，使用maven的同学，可以直接使用</p>
-
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.im4java&lt;/groupId&gt;
-    &lt;artifactId&gt;im4java&lt;/artifactId&gt;
-    &lt;version&gt;1.4.0&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
-
-<p>直接上代码说明比较方便</p>
-
-<pre><code>public class ImageUtils {
-    private ConvertCmd cmd = new ConvertCmd();
-        private ImageUtils() {
-        // Windows下需要以下配置
-        // ImageMagick在windows中的安装目录
-        String im = "C:\\Program Files\\ImageMagick-6.8.7-Q16"
-        ProcessStarter.setGlobalSearchPath(im);
-    }
-
-    //缩放
-    public void resize(Integer width, Integer height, String src, String dst) throws Exception {
-        IMOperation imop = new IMOperation();
-        imop.addImage(src);
-        imop.resize(width, height);
-        imop.addImage(dst);
-        cmd.run(imop);
-
-    }
-
-    //剪裁
-    public void crop(String dst,Integer srcWidth, Integer srcHeight, Integer newWidth, Integer newHeight) throws Exception {
-        IMOperation imop = new IMOperation();
-        imop.addImage(dst);
-        imop.crop(srcWidth, srcHeight, newWidth, newHeight);
-        imop.addImage(dst);
-        cmd.run(imop);
-
-    }
-</code></pre>
-
-<p>更多功能还请参考官方文档.</p>
-]]></content>
-  </entry>
+    </p>
+    
+      <div class="sharing">
   
-  <entry>
-    <title type="html"><![CDATA[优化Jetty]]></title>
-    <link href="http://karidyang.github.io/blog/2014/01/20/optimize-jetty/"/>
-    <updated>2014-01-20T13:41:03+08:00</updated>
-    <id>http://karidyang.github.io/blog/2014/01/20/optimize-jetty</id>
-    <content type="html"><![CDATA[<h2>调整Linux内核参数</h2>
-
-<h5>调整Tcp Buffer Sizes</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>net.core.rmem_max = 16777216
-</span><span class='line'>net.core.wmem_max = 16777216
-</span><span class='line'>net.ipv4.tcp_rmem = 4096 87380 4194304
-</span><span class='line'>net.ipv4.tcp_wmem = 4096 16384 4194304</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调整Queue Sizes</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>net.core.somaxconn = 4096
-</span><span class='line'>
-</span><span class='line'>net.core.netdev_max_backlog = 16385
-</span><span class='line'>net.ipv4.tcp_max_syn_backlog = 8192
-</span><span class='line'>net.ipv4.tcp_syncookies = 1</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>调整Ports</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>net.ipv4.ip_local_port_range = 1024 65000
-</span><span class='line'>net.ipv4.tcp_tw_recycle = 1</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<h2>调整JVM参数</h2>
-
-<hr />
-
-<h2>调整Jetty配置</h2>
-
-<h4>调整Acceptors数量</h4>
-
-<p>大于等于1，小于等于CPU数量</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;Set name="Acceptors"&gt;4&lt;/Set&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>为线程池的阻塞队列设置默认大小</h4>
-
-<p>默认大小的值以每分钟的请求数来计算</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;Set name="ThreadPool"&gt;
-</span><span class='line'>      &lt;!-- Default queued blocking threadpool --&gt;
-</span><span class='line'>      &lt;New class="org.eclipse.jetty.util.thread.QueuedThreadPool"&gt;
-</span><span class='line'>        &lt;Arg&gt;
-</span><span class='line'>          &lt;New class="java.util.concurrent.ArrayBlockingQueue"&gt;
-</span><span class='line'>            &lt;Arg type="int"&gt;6000&lt;/Arg&gt;
-</span><span class='line'>          &lt;/New&gt;
-</span><span class='line'>        &lt;/Arg&gt;
-</span><span class='line'>        &lt;Set name="minThreads"&gt;10&lt;/Set&gt;
-</span><span class='line'>        &lt;Set name="maxThreads"&gt;500&lt;/Set&gt;
-</span><span class='line'>        &lt;Set name="detailedDump"&gt;false&lt;/Set&gt;
-</span><span class='line'>      &lt;/New&gt;
-</span><span class='line'>    &lt;/Set&gt;</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
   
-</feed>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/04/deploy-rails-production/" title="Previous Post: 部署rails生产环境">&laquo; 部署rails生产环境</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/">'Varnish 4.0 安装与配置'</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/04/deploy-rails-production/">部署rails生产环境</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/03/develop-weixin-web-server/">开发微信服务器</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/11/use-nginx/">使用Nginx的一些心得体会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/11/use-imagemagick/">使用ImageMagick处理图片</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p>
+    Java开发者，Rails开发者。<br/><br/>
+
+    Java开发工程师，现就职于 <a href="http://www.gwsoft.com.cn">四川长城软件科技股份有限公司</a> 
+  </p>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - karidyang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>， 感谢 <a href="http://gitcafe.com">GitCafe</a> 为本站提供存储空间</span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

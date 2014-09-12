@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Weixin | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/weixin/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-08-04T21:15:30+08:00</updated>
+  <updated>2014-09-12T11:25:47+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Develop Weixin Web Server]]></title>
+    <title type="html"><![CDATA[开发微信服务器]]></title>
     <link href="http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server/"/>
     <updated>2014-06-03T09:40:49+08:00</updated>
     <id>http://karidyang.github.io/blog/2014/06/03/develop-weixin-web-server</id>
@@ -159,7 +159,7 @@ private static String byteToHexStr(byte mByte) {
 
 <h3>三、设置菜单</h3>
 
-<p>未完待续。</p>
+<p>微信设置菜单的方式比较简单，就是POST一个JSON格式的菜单数据到微信服务器就行了，只是不同的菜单按钮对应不同的功能，比如可点击的，或者执行某项请求的，或者是跳转的。</p>
 ]]></content>
   </entry>
   

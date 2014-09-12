@@ -9,24 +9,7 @@
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="1、添加Gem 1
-2
-gem 'unicorn'
-gem 'execjs' 2、添加unicorn的配置文件 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-touch config/unicorn.conf
-vi config/unicorn.conf
-rails_env = ENV[' &hellip;">
+  <meta name="description" content="Varnish简介 Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。 安装 我们这里只将如何以源码在CentOS上安装，其他方式请参考官方文档 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +63,649 @@ rails_env = ENV[' &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/">&#8216;Varnish 4.0 安装与配置&#8217;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-10T11:44:42+08:00" pubdate data-updated="true">Sep 10<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h5>Varnish简介</h5>
+
+<p>Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。</p>
+
+<h5>安装</h5>
+
+<p>我们这里只将如何以源码在CentOS上安装，其他方式请参考官方文档</p>
+
+<p>1、下载源代码</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://git.varnish-cache.org/varnish-cache</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2、安装必须的依赖包</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install libtool automake autoconf groff libedit-devel ncurses-devel pcre-devel pkgconfig python-docutils</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3、编译安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd varnish-cache/
+</span><span class='line'>sh autogen.sh
+</span><span class='line'>sh configure --prefix=/usr/local/varnish
+</span><span class='line'>make
+</span><span class='line'>make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>4、启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./sbin/varnishd -f var/varnish/default.vcl -s malloc,1G -T 127.0.0.1:2000 -a 0.0.0.0:8080
+</span><span class='line'>
+</span><span class='line'>-f 指定加载配置文件
+</span><span class='line'>-s 指定内存库和大小
+</span><span class='line'>-T 指定管理端IP和端口
+</span><span class='line'>-a 监听的业务IP和端口，这里指监听所有IP</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5、查看日志</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bin/varnishlog</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样就安装好了Varnish，下面就是配置了</p>
+
+<h4>配置</h4>
+
+<p>Varnish的配置是使用它自定义的VCL语法的，在Varnish启动时，会将配置文件编译为C语言。</p>
+
+<ul>
+<li><p>内置函数</p>
+
+<p>  vcl_recv：用于接收和处理请求；当请求到达并成功接收后被调用，通过判断请求的数据来决定如何处理请求；</p>
+
+<p>  vcl_pipe：此函数在进入pipe模式时被调用，用于将请求直接传递至后端主机，并将后端响应原样返回客户端；</p>
+
+<p>  vcl_pass：此函数在进入pass模式时被调用，用于将请求直接传递至后端主机，但后端主机的响应并不缓存直接返回客户端；</p>
+
+<p>  vcl_hit：在执行 lookup 指令后，在缓存中找到请求的内容后将自动调用该函数；</p>
+
+<p>  vcl_miss：在执行 lookup 指令后，在缓存中没有找到请求的内容时自动调用该方法，此函数可用于判断是否需要从后端服务器获取内容；</p>
+
+<p>  vcl_hash：在vcl_recv调用后为请求创建一个hash值时，调用此函数；此hash值将作为varnish中搜索缓存对象的key；</p>
+
+<p>  vcl_purge：pruge操作执行后调用此函数，可用于构建一个响应；</p>
+
+<p>  vcl_deliver：将在缓存中找到请求的内容发送给客户端前调用此方法；</p>
+
+<p>  vcl_backend_fetch：向后端主机发送请求前，调用此函数，可修改发往后端的请求；</p>
+
+<p>  vcl_backend_response：获得后端主机的响应后，可调用此函数；</p>
+
+<p>  vcl_backend_error：当从后端主机获取源文件失败时，调用此函数；</p>
+
+<p>  vcl_init：VCL加载时调用此函数，经常用于初始化varnish模块(VMODs)</p>
+
+<p>  vcl_fini：当所有请求都离开当前VCL，且当前VCL被弃用时，调用此函数，经常用于清理varnish模块；</p></li>
+<li><p>变量类型详解</p>
+
+<p>  req：The request object，请求到达时可用的变量</p>
+
+<p>  bereq：The backend request object，向后端主机请求时可用的变量</p>
+
+<p>  beresp：The backend response object，从后端主机获取内容时可用的变量</p>
+
+<p>  resp：The HTTP response object，对客户端响应时可用的变量</p>
+
+<p>  obj：存储在内存中时对象属性相关的可用的变量</p></li>
+<li><p>示例</p>
+
+<p>  首先VCL文件头必须要写 &lsquo;vcl 4.0&#8217;，强制说明这个配置文件是4.0版本使用的。&#8217;import directors&#8217;是用于代理后端是多机的情况，比如如下配置：</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vcl 4.0;
+</span><span class='line'>import directors;
+</span><span class='line'>
+</span><span class='line'>backend web1 {
+</span><span class='line'>  .host = "localhost";
+</span><span class='line'>  .port = "8080";
+</span><span class='line'>}
+</span><span class='line'>backend web2 {
+</span><span class='line'>  .host = "localhost";
+</span><span class='line'>  .port = "8080";
+</span><span class='line'>}
+</span><span class='line'>  #web3是由web1和web2共同组成的，同时web3是使用的轮询的方式来选择是路由到web1还是web2。
+</span><span class='line'>sub vcl_init {
+</span><span class='line'>    new web3 = directors.round_robin();
+</span><span class='line'>    web3.add_backend(web1);
+</span><span class='line'>    web3.add_backend(web2);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>sub vcl_recv {
+</span><span class='line'>     set req.backend_hint = web3.backend();
+</span><span class='line'>     if (req.http.x-forwarded-for) {
+</span><span class='line'>       set req.http.X-Forwarded-For =
+</span><span class='line'>       req.http.X-Forwarded-For + ", " + client.ip;
+</span><span class='line'>     } else {
+</span><span class='line'>       set req.http.X-Forwarded-For = client.ip;
+</span><span class='line'>     }
+</span><span class='line'>     if (req.method != "GET" &&
+</span><span class='line'>       req.method != "HEAD" &&
+</span><span class='line'>       req.method != "PUT" &&
+</span><span class='line'>       req.method != "POST" &&
+</span><span class='line'>       req.method != "TRACE" &&
+</span><span class='line'>       req.method != "OPTIONS" &&
+</span><span class='line'>       req.method != "DELETE") {
+</span><span class='line'>         return (pipe);
+</span><span class='line'>     }
+</span><span class='line'>     if (req.method != "GET" && req.method != "HEAD") {
+</span><span class='line'>         return (pass);
+</span><span class='line'>     }
+</span><span class='line'>     if (req.method == "PURGE") {
+</span><span class='line'>        if (client.ip ~ local) {
+</span><span class='line'>           return(purge);
+</span><span class='line'>        } else {
+</span><span class='line'>           return(synth(403, "Access denied."));
+</span><span class='line'>        }
+</span><span class='line'>     }
+</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>性能测试</h4>
+
+<ul>
+<li>使用Varnish，请求流媒体资源，并发20个</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 200 -c 20 http://192.168.1.101:8080/data/ring/20090925/47541/1289369.mp3
+</span><span class='line'>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+</span><span class='line'>Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span><span class='line'>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span><span class='line'>
+</span><span class='line'>Benchmarking 192.168.1.101 (be patient)
+</span><span class='line'>Completed 100 requests
+</span><span class='line'>Completed 200 requests
+</span><span class='line'>Finished 200 requests
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Server Software:        nginx/0.8.46
+</span><span class='line'>Server Hostname:        192.168.1.101
+</span><span class='line'>Server Port:            8080
+</span><span class='line'>
+</span><span class='line'>Document Path:          /data/ring/20090925/47541/1289369.mp3
+</span><span class='line'>Document Length:        874370 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      20
+</span><span class='line'>Time taken for tests:   97.471 seconds
+</span><span class='line'>Complete requests:      200
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      174934225 bytes
+</span><span class='line'>HTML transferred:       174874000 bytes
+</span><span class='line'>Requests per second:    2.05 [#/sec] (mean)
+</span><span class='line'>Time per request:       9747.065 [ms] (mean)
+</span><span class='line'>Time per request:       487.353 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1752.67 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:       14   67  62.7     47     242
+</span><span class='line'>Processing:  3390 9448 2377.2   9474   16366
+</span><span class='line'>Waiting:        8   75 108.1     44     753
+</span><span class='line'>Total:       3437 9516 2382.5   9576   16421
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%   9576
+</span><span class='line'>  66%  10462
+</span><span class='line'>  75%  10881
+</span><span class='line'>  80%  11306
+</span><span class='line'>  90%  12746
+</span><span class='line'>  95%  13703
+</span><span class='line'>  98%  14877
+</span><span class='line'>  99%  15983
+</span><span class='line'> 100%  16421 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>使用Varnish请求流媒体资源，并发30个</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 200 -c 30 http://192.168.1.101:8080/data/ring/20090925/47541/1289369.mp3
+</span><span class='line'>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+</span><span class='line'>Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span><span class='line'>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span><span class='line'>
+</span><span class='line'>Benchmarking 192.168.1.101 (be patient)
+</span><span class='line'>Completed 100 requests
+</span><span class='line'>Completed 200 requests
+</span><span class='line'>Finished 200 requests
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Server Software:        nginx/0.8.46
+</span><span class='line'>Server Hostname:        192.168.1.101
+</span><span class='line'>Server Port:            8080
+</span><span class='line'>
+</span><span class='line'>Document Path:          /data/ring/20090925/47541/1289369.mp3
+</span><span class='line'>Document Length:        874370 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      30
+</span><span class='line'>Time taken for tests:   86.679 seconds
+</span><span class='line'>Complete requests:      200
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      174934106 bytes
+</span><span class='line'>HTML transferred:       174874000 bytes
+</span><span class='line'>Requests per second:    2.31 [#/sec] (mean)
+</span><span class='line'>Time per request:       13001.908 [ms] (mean)
+</span><span class='line'>Time per request:       433.397 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1970.87 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        9   83 100.5     45     771
+</span><span class='line'>Processing:  6518 12533 3048.6  12224   21697
+</span><span class='line'>Waiting:       12   61 100.9     40     979
+</span><span class='line'>Total:       6548 12616 3062.2  12429   21723
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%  12429
+</span><span class='line'>  66%  13628
+</span><span class='line'>  75%  14365
+</span><span class='line'>  80%  14881
+</span><span class='line'>  90%  17125
+</span><span class='line'>  95%  18631
+</span><span class='line'>  98%  19900
+</span><span class='line'>  99%  20743
+</span><span class='line'> 100%  21723 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>不使用Varnish请求流媒体，并发20个</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 200 -c 20 http://192.168.1.101/1289369.mp3
+</span><span class='line'>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+</span><span class='line'>Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span><span class='line'>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span><span class='line'>
+</span><span class='line'>Benchmarking 192.168.1.101 (be patient)
+</span><span class='line'>Completed 100 requests
+</span><span class='line'>Completed 200 requests
+</span><span class='line'>Finished 200 requests
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Server Software:        nginx/1.4.7
+</span><span class='line'>Server Hostname:        192.168.1.101
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /1289369.mp3
+</span><span class='line'>Document Length:        874370 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      20
+</span><span class='line'>Time taken for tests:   95.333 seconds
+</span><span class='line'>Complete requests:      200
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      174921600 bytes
+</span><span class='line'>HTML transferred:       174874000 bytes
+</span><span class='line'>Requests per second:    2.10 [#/sec] (mean)
+</span><span class='line'>Time per request:       9533.339 [ms] (mean)
+</span><span class='line'>Time per request:       476.667 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1791.84 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:        5   55  55.5     35     538
+</span><span class='line'>Processing:  3906 9288 2493.6   9128   17836
+</span><span class='line'>Waiting:        2   61  77.9     43     785
+</span><span class='line'>Total:       3943 9343 2493.9   9201   17888
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%   9201
+</span><span class='line'>  66%  10175
+</span><span class='line'>  75%  10619
+</span><span class='line'>  80%  10935
+</span><span class='line'>  90%  12902
+</span><span class='line'>  95%  14188
+</span><span class='line'>  98%  16024
+</span><span class='line'>  99%  17397
+</span><span class='line'> 100%  17888 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>不使用Varnish请求流媒体，并发30个</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ab -n 200 -c 30 http://192.168.1.101/1289369.mp3
+</span><span class='line'>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+</span><span class='line'>Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span><span class='line'>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span><span class='line'>
+</span><span class='line'>Benchmarking 192.168.1.101 (be patient)
+</span><span class='line'>Completed 100 requests
+</span><span class='line'>Completed 200 requests
+</span><span class='line'>Finished 200 requests
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Server Software:        nginx/1.4.7
+</span><span class='line'>Server Hostname:        192.168.1.101
+</span><span class='line'>Server Port:            80
+</span><span class='line'>
+</span><span class='line'>Document Path:          /1289369.mp3
+</span><span class='line'>Document Length:        874370 bytes
+</span><span class='line'>
+</span><span class='line'>Concurrency Level:      30
+</span><span class='line'>Time taken for tests:   102.131 seconds
+</span><span class='line'>Complete requests:      200
+</span><span class='line'>Failed requests:        0
+</span><span class='line'>Write errors:           0
+</span><span class='line'>Total transferred:      174921600 bytes
+</span><span class='line'>HTML transferred:       174874000 bytes
+</span><span class='line'>Requests per second:    1.96 [#/sec] (mean)
+</span><span class='line'>Time per request:       15319.686 [ms] (mean)
+</span><span class='line'>Time per request:       510.656 [ms] (mean, across all concurrent requests)
+</span><span class='line'>Transfer rate:          1672.57 [Kbytes/sec] received
+</span><span class='line'>
+</span><span class='line'>Connection Times (ms)
+</span><span class='line'>              min  mean[+/-sd] median   max
+</span><span class='line'>Connect:       18   62  65.2     49     507
+</span><span class='line'>Processing:  4651 14863 4008.9  14227   28418
+</span><span class='line'>Waiting:        5   83 117.1     48    1091
+</span><span class='line'>Total:       4715 14925 4012.8  14322   28482
+</span><span class='line'>
+</span><span class='line'>Percentage of the requests served within a certain time (ms)
+</span><span class='line'>  50%  14322
+</span><span class='line'>  66%  16154
+</span><span class='line'>  75%  17140
+</span><span class='line'>  80%  18276
+</span><span class='line'>  90%  20387
+</span><span class='line'>  95%  22312
+</span><span class='line'>  98%  25391
+</span><span class='line'>  99%  26251
+</span><span class='line'> 100%  28482 (longest request)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看出，使用Varnish后，性能有所提升。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -180,7 +806,7 @@ rails_env = ENV[' &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/06/03/develop-weixin-web-server/">Develop Weixin Web Server</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/06/03/develop-weixin-web-server/">开发微信服务器</a></h1>
     
     
       <p class="meta">
@@ -409,7 +1035,7 @@ rails_env = ENV[' &hellip;">
 
 <h3>三、设置菜单</h3>
 
-<p>未完待续。</p>
+<p>微信设置菜单的方式比较简单，就是POST一个JSON格式的菜单数据到微信服务器就行了，只是不同的菜单按钮对应不同的功能，比如可点击的，或者执行某项请求的，或者是跳转的。</p>
 </div>
   
   
@@ -728,11 +1354,15 @@ ldconfig /usr/local/lib
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/">&#8216;Varnish 4.0 安装与配置&#8217;</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/04/deploy-rails-production/">部署rails生产环境</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/06/03/develop-weixin-web-server/">Develop Weixin Web Server</a>
+        <a href="/blog/2014/06/03/develop-weixin-web-server/">开发微信服务器</a>
       </li>
     
       <li class="post">
@@ -741,10 +1371,6 @@ ldconfig /usr/local/lib
     
       <li class="post">
         <a href="/blog/2014/03/11/use-imagemagick/">使用ImageMagick处理图片</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/20/optimize-jetty/">优化Jetty</a>
       </li>
     
   </ul>
