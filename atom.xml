@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-10-05T10:33:52+08:00</updated>
+  <updated>2014-10-05T10:35:40+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA['Rails中strack Loop Too Deep问题的解决']]></title>
+    <title type="html"><![CDATA[Rails中strack Loop Too Deep 问题的解决]]></title>
     <link href="http://karidyang.github.io/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue/"/>
     <updated>2014-10-05T10:16:12+08:00</updated>
     <id>http://karidyang.github.io/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue</id>
