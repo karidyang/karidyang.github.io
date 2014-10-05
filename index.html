@@ -9,7 +9,14 @@
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="Varnish简介 Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。 安装 我们这里只将如何以源码在CentOS上安装，其他方式请参考官方文档 &hellip;">
+  <meta name="description" content="在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出&#8221;Stack loop too deep&#8221;这个异常。
+雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。 1
+2
+3
+4
+5
+6
+7 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -63,6 +70,101 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue/">&#8216;Rails中strack Loop Too Deep问题的解决&#8217;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-05T10:16:12+08:00" pubdate data-updated="true">Oct 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出&#8221;Stack loop too deep&#8221;这个异常。
+雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  def transcation_in (detail, operator='系统')
+</span><span class='line'>    self.money = self.money + detail.money
+</span><span class='line'>    detail.account_type = STATE[:in]
+</span><span class='line'>    detail.updateby = operator
+</span><span class='line'>    detail.save
+</span><span class='line'>    self.account_details &lt;&lt; detail
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如代码所见，逻辑很简单，就是对一个Model对象的简单保存，并加入到关联对象中。这哪里会出现堆栈太深呢。</p>
+
+<p>随后我加入了调试日志</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  def transcation_in (detail, operator='系统')
+</span><span class='line'>    puts 'start transcation_in'
+</span><span class='line'>    begin
+</span><span class='line'>      self.money = self.money + detail.money
+</span><span class='line'>      detail.account_type = STATE[:in]
+</span><span class='line'>      detail.updateby = operator
+</span><span class='line'>      detail.save
+</span><span class='line'>      self.account_details &lt;&lt; detail
+</span><span class='line'>    rescue Exception =&gt; e
+</span><span class='line'>      puts "====#{e}"
+</span><span class='line'>    end
+</span><span class='line'>    puts 'end transcation_in'
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>查看了日志，异常是在执行“detail.save”这个代码的是报的异常。这明明很正常呢。。。。日怪了。</p>
+
+<p>调试日志看不出东西来，那我就进入了debugger模式，发现执行到这一步时，进入了active_record.transactions.rb这个类里面的save方法，但我没开启事务呢。难道是因为方法名字的问题？？？这有点扯蛋了。。。</p>
+
+<p>我查看了我的Mysql数据表，确实是MyISAM引擎，改成InnoDB试试？尼玛，成功了！！！这里果然用了事务，当数据库表不支持事务时，就抛出了异常！！！</p>
+
+<p>这错误异常信息也太扯蛋了嘛，提示和事务一点关系也没有！</p>
+
+<p>希望这篇文章能为遇到同类问题的人提供解决办法，但问题的根源我还是没找到，为什么会用到事务了呢。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1354,6 +1456,10 @@ ldconfig /usr/local/lib
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue/">&#8216;Rails中strack Loop Too Deep问题的解决&#8217;</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/">&#8216;Varnish 4.0 安装与配置&#8217;</a>
       </li>
     
@@ -1367,10 +1473,6 @@ ldconfig /usr/local/lib
     
       <li class="post">
         <a href="/blog/2014/03/11/use-nginx/">使用Nginx的一些心得体会</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/11/use-imagemagick/">使用ImageMagick处理图片</a>
       </li>
     
   </ul>

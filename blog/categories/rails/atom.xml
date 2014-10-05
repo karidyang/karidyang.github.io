@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-09-12T11:25:47+08:00</updated>
+  <updated>2014-10-05T10:33:52+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA['Rails中strack Loop Too Deep问题的解决']]></title>
+    <link href="http://karidyang.github.io/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue/"/>
+    <updated>2014-10-05T10:16:12+08:00</updated>
+    <id>http://karidyang.github.io/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue</id>
+    <content type="html"><![CDATA[<p>在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出"Stack loop too deep"这个异常。
+雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。</p>
+
+<p>```
+  def transcation_in (detail, operator=&lsquo;系统&rsquo;)</p>
+
+<pre><code>self.money = self.money + detail.money
+detail.account_type = STATE[:in]
+detail.updateby = operator
+detail.save
+self.account_details &lt;&lt; detail
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>如代码所见，逻辑很简单，就是对一个Model对象的简单保存，并加入到关联对象中。这哪里会出现堆栈太深呢。</p>
+
+<p>随后我加入了调试日志</p>
+
+<p>```
+  def transcation_in (detail, operator=&lsquo;系统&rsquo;)</p>
+
+<pre><code>puts 'start transcation_in'
+begin
+  self.money = self.money + detail.money
+  detail.account_type = STATE[:in]
+  detail.updateby = operator
+  detail.save
+  self.account_details &lt;&lt; detail
+rescue Exception =&gt; e
+  puts "====#{e}"
+end
+puts 'end transcation_in'
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>查看了日志，异常是在执行“detail.save”这个代码的是报的异常。这明明很正常呢。。。。日怪了。</p>
+
+<p>调试日志看不出东西来，那我就进入了debugger模式，发现执行到这一步时，进入了active_record.transactions.rb这个类里面的save方法，但我没开启事务呢。难道是因为方法名字的问题？？？这有点扯蛋了。。。</p>
+
+<p>我查看了我的Mysql数据表，确实是MyISAM引擎，改成InnoDB试试？尼玛，成功了！！！这里果然用了事务，当数据库表不支持事务时，就抛出了异常！！！</p>
+
+<p>这错误异常信息也太扯蛋了嘛，提示和事务一点关系也没有！</p>
+
+<p>希望这篇文章能为遇到同类问题的人提供解决办法，但问题的根源我还是没找到，为什么会用到事务了呢。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[部署rails生产环境]]></title>

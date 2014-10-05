@@ -5,28 +5,18 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>部署rails生产环境 - karidyang的技术博客</title>
+  <title>'Rails中strack Loop Too Deep问题的解决' - karidyang的技术博客</title>
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="1、添加Gem 1
-2
-gem 'unicorn'
-gem 'execjs' 2、添加unicorn的配置文件 1
+  <meta name="description" content="在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出&#8221;Stack loop too deep&#8221;这个异常。
+雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。 1
 2
 3
 4
 5
 6
-7
-8
-9
-10
-11
-12
-touch config/unicorn.conf
-vi config/unicorn.conf
-rails_env = ENV[' &hellip;">
+7 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -35,7 +25,7 @@ rails_env = ENV[' &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://karidyang.github.io/blog/2014/08/04/deploy-rails-production">
+  <link rel="canonical" href="http://karidyang.github.io/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
@@ -83,7 +73,7 @@ rails_env = ENV[' &hellip;">
   
   <header>
     
-      <h1 class="entry-title">部署rails生产环境</h1>
+      <h1 class="entry-title">'Rails中strack Loop Too Deep问题的解决'</h1>
     
     
       <p class="meta">
@@ -99,22 +89,35 @@ rails_env = ENV[' &hellip;">
   
 
 
-<time datetime="2014-08-04T21:12:01+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2014</time>
+<time datetime="2014-10-05T10:16:12+08:00" pubdate data-updated="true">Oct 5<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h5>1、添加Gem</h5>
+<div class="entry-content"><p>在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出&#8221;Stack loop too deep&#8221;这个异常。
+雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'unicorn'
-</span><span class='line'>gem 'execjs'</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  def transcation_in (detail, operator='系统')
+</span><span class='line'>    self.money = self.money + detail.money
+</span><span class='line'>    detail.account_type = STATE[:in]
+</span><span class='line'>    detail.updateby = operator
+</span><span class='line'>    detail.save
+</span><span class='line'>    self.account_details &lt;&lt; detail
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>2、添加unicorn的配置文件</h5>
+<p>如代码所见，逻辑很简单，就是对一个Model对象的简单保存，并加入到关联对象中。这哪里会出现堆栈太深呢。</p>
+
+<p>随后我加入了调试日志</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -128,43 +131,31 @@ rails_env = ENV[' &hellip;">
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>touch config/unicorn.conf
-</span><span class='line'>vi config/unicorn.conf
-</span><span class='line'>rails_env = ENV['RAILS_ENV'] || 'production'
-</span><span class='line'>user 'root'
-</span><span class='line'>worker_processes 2
-</span><span class='line'>preload_app true
-</span><span class='line'>timeout 30
-</span><span class='line'>listen 3009
-</span><span class='line'>working_directory "/www/htdocs/weixin_backend"
-</span><span class='line'>pid "/www/htdocs/weixin_backend/unicorn.pid"
-</span><span class='line'>stderr_path "/www/htdocs/weixin_backend/log/unicorn.stderr.log"
-</span><span class='line'>stdout_path "/www/htdocs/weixin_backend/log/unicorn.stdout.log"</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  def transcation_in (detail, operator='系统')
+</span><span class='line'>    puts 'start transcation_in'
+</span><span class='line'>    begin
+</span><span class='line'>      self.money = self.money + detail.money
+</span><span class='line'>      detail.account_type = STATE[:in]
+</span><span class='line'>      detail.updateby = operator
+</span><span class='line'>      detail.save
+</span><span class='line'>      self.account_details &lt;&lt; detail
+</span><span class='line'>    rescue Exception =&gt; e
+</span><span class='line'>      puts "====#{e}"
+</span><span class='line'>    end
+</span><span class='line'>    puts 'end transcation_in'
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
 
 
-<h5>3、添加启动脚本</h5>
+<p>查看了日志，异常是在执行“detail.save”这个代码的是报的异常。这明明很正常呢。。。。日怪了。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>unicorn_rails -E production -c config/unicorn.rb -D</span></code></pre></td></tr></table></div></figure>
+<p>调试日志看不出东西来，那我就进入了debugger模式，发现执行到这一步时，进入了active_record.transactions.rb这个类里面的save方法，但我没开启事务呢。难道是因为方法名字的问题？？？这有点扯蛋了。。。</p>
 
+<p>我查看了我的Mysql数据表，确实是MyISAM引擎，改成InnoDB试试？尼玛，成功了！！！这里果然用了事务，当数据库表不支持事务时，就抛出了异常！！！</p>
 
-<h5>4、启动之前需要先执行</h5>
+<p>这错误异常信息也太扯蛋了嘛，提示和事务一点关系也没有！</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake assets/precompile</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>5、配置nginx</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>location /assets 
-</span><span class='line'>{
-</span><span class='line'>  root /www/htdocs/weixin_backend/public;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
+<p>希望这篇文章能为遇到同类问题的人提供解决办法，但问题的根源我还是没找到，为什么会用到事务了呢。</p>
 </div>
 
 
@@ -187,7 +178,7 @@ rails_env = ENV[' &hellip;">
   
 
 
-<time datetime="2014-08-04T21:12:01+08:00" pubdate data-updated="true">Aug 4<span>th</span>, 2014</time>
+<time datetime="2014-10-05T10:16:12+08:00" pubdate data-updated="true">Oct 5<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -208,10 +199,8 @@ rails_env = ENV[' &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/06/03/develop-weixin-web-server/" title="Previous Post: 开发微信服务器">&laquo; 开发微信服务器</a>
+        <a class="basic-alignment left" href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/" title="Previous Post: 'varnish 4.0 安装与配置'">&laquo; 'varnish 4.0 安装与配置'</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/" title="Next Post: 'varnish 4.0 安装与配置'">'varnish 4.0 安装与配置' &raquo;</a>
       
     </p>
   </footer>
