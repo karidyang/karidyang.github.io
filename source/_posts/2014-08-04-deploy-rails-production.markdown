@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "'deploy rails production'"
+title: "部署rails生产环境"
 date: 2014-08-04 21:12:01 +0800
 comments: true
 categories: rails
 ---
 
 
-##部署rails生产环境
+
 
 
 #####1、添加Gem

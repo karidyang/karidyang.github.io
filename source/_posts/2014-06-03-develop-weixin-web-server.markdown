@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "develop weixin web server"
+title: "开发微信服务器"
 date: 2014-06-03 09:40:49 +0800
 comments: true
 categories: java, weixin
@@ -145,4 +145,4 @@ public class SignUtils {
 
 ### 三、设置菜单
 
-未完待续。
+微信设置菜单的方式比较简单，就是POST一个JSON格式的菜单数据到微信服务器就行了，只是不同的菜单按钮对应不同的功能，比如可点击的，或者执行某项请求的，或者是跳转的。

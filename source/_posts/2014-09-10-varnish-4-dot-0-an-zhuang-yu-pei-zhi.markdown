@@ -1,0 +1,368 @@
+---
+layout: post
+title: "'varnish 4.0 安装与配置'"
+date: 2014-09-10 11:44:42 +0800
+comments: true
+categories: varnish 
+---
+
+#####Varnish简介
+Varnish是一款高性能且开源的反向代理服务器和HTTP加速器，其采用全新的软件体系结构，和现在的硬件体系紧密结合，与传统的Squid相比，varnish具有性能更高，速度更快，管理更加方便等诸多优点。
+
+#####安装
+我们这里只将如何以源码在CentOS上安装，其他方式请参考官方文档
+
+1、下载源代码
+
+```
+git clone git://git.varnish-cache.org/varnish-cache
+```
+
+2、安装必须的依赖包
+
+```
+yum install libtool automake autoconf groff libedit-devel ncurses-devel pcre-devel pkgconfig python-docutils
+```
+
+3、编译安装
+
+```
+cd varnish-cache/
+sh autogen.sh
+sh configure --prefix=/usr/local/varnish
+make
+make install
+```
+
+4、启动
+
+```
+./sbin/varnishd -f var/varnish/default.vcl -s malloc,1G -T 127.0.0.1:2000 -a 0.0.0.0:8080
+
+-f 指定加载配置文件
+-s 指定内存库和大小
+-T 指定管理端IP和端口
+-a 监听的业务IP和端口，这里指监听所有IP
+```
+
+5、查看日志
+
+```
+bin/varnishlog
+```
+
+这样就安装好了Varnish，下面就是配置了
+
+
+####配置
+
+Varnish的配置是使用它自定义的VCL语法的，在Varnish启动时，会将配置文件编译为C语言。
+
+* 内置函数
+
+	vcl_recv：用于接收和处理请求；当请求到达并成功接收后被调用，通过判断请求的数据来决定如何处理请求；
+
+	vcl_pipe：此函数在进入pipe模式时被调用，用于将请求直接传递至后端主机，并将后端响应原样返回客户端；
+
+	vcl_pass：此函数在进入pass模式时被调用，用于将请求直接传递至后端主机，但后端主机的响应并不缓存直接返回客户端；
+
+	vcl_hit：在执行 lookup 指令后，在缓存中找到请求的内容后将自动调用该函数；
+
+	vcl_miss：在执行 lookup 指令后，在缓存中没有找到请求的内容时自动调用该方法，此函数可用于判断是否需要从后端服务器获取内容；
+
+	vcl_hash：在vcl_recv调用后为请求创建一个hash值时，调用此函数；此hash值将作为varnish中搜索缓存对象的key；
+
+	vcl_purge：pruge操作执行后调用此函数，可用于构建一个响应；
+
+	vcl_deliver：将在缓存中找到请求的内容发送给客户端前调用此方法；
+
+	vcl_backend_fetch：向后端主机发送请求前，调用此函数，可修改发往后端的请求；
+
+	vcl_backend_response：获得后端主机的响应后，可调用此函数；
+
+	vcl_backend_error：当从后端主机获取源文件失败时，调用此函数；
+
+	vcl_init：VCL加载时调用此函数，经常用于初始化varnish模块(VMODs)
+
+	vcl_fini：当所有请求都离开当前VCL，且当前VCL被弃用时，调用此函数，经常用于清理varnish模块；
+
+
+* 变量类型详解
+
+	req：The request object，请求到达时可用的变量
+
+	bereq：The backend request object，向后端主机请求时可用的变量
+
+	beresp：The backend response object，从后端主机获取内容时可用的变量
+
+	resp：The HTTP response object，对客户端响应时可用的变量
+
+	obj：存储在内存中时对象属性相关的可用的变量
+
+* 示例
+
+	首先VCL文件头必须要写 'vcl 4.0'，强制说明这个配置文件是4.0版本使用的。'import directors'是用于代理后端是多机的情况，比如如下配置：
+
+```
+vcl 4.0;
+import directors;
+
+backend web1 {
+	.host = "localhost";
+	.port = "8080";
+}
+backend web2 {
+	.host = "localhost";
+	.port = "8080";
+}
+	#web3是由web1和web2共同组成的，同时web3是使用的轮询的方式来选择是路由到web1还是web2。
+sub vcl_init {
+    new web3 = directors.round_robin();
+    web3.add_backend(web1);
+    web3.add_backend(web2);
+}
+
+sub vcl_recv {
+     set req.backend_hint = web3.backend();
+     if (req.http.x-forwarded-for) {
+       set req.http.X-Forwarded-For =
+       req.http.X-Forwarded-For + ", " + client.ip;
+     } else {
+       set req.http.X-Forwarded-For = client.ip;
+     }
+     if (req.method != "GET" &&
+       req.method != "HEAD" &&
+       req.method != "PUT" &&
+       req.method != "POST" &&
+       req.method != "TRACE" &&
+       req.method != "OPTIONS" &&
+       req.method != "DELETE") {
+         return (pipe);
+     }
+     if (req.method != "GET" && req.method != "HEAD") {
+         return (pass);
+     }
+     if (req.method == "PURGE") {
+        if (client.ip ~ local) {
+           return(purge);
+        } else {
+           return(synth(403, "Access denied."));
+        }
+     }
+ }
+```
+
+
+
+####性能测试
+
+* 使用Varnish，请求流媒体资源，并发20个
+
+```
+ab -n 200 -c 20 http://192.168.1.101:8080/data/ring/20090925/47541/1289369.mp3
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 192.168.1.101 (be patient)
+Completed 100 requests
+Completed 200 requests
+Finished 200 requests
+
+
+Server Software:        nginx/0.8.46
+Server Hostname:        192.168.1.101
+Server Port:            8080
+
+Document Path:          /data/ring/20090925/47541/1289369.mp3
+Document Length:        874370 bytes
+
+Concurrency Level:      20
+Time taken for tests:   97.471 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      174934225 bytes
+HTML transferred:       174874000 bytes
+Requests per second:    2.05 [#/sec] (mean)
+Time per request:       9747.065 [ms] (mean)
+Time per request:       487.353 [ms] (mean, across all concurrent requests)
+Transfer rate:          1752.67 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       14   67  62.7     47     242
+Processing:  3390 9448 2377.2   9474   16366
+Waiting:        8   75 108.1     44     753
+Total:       3437 9516 2382.5   9576   16421
+
+Percentage of the requests served within a certain time (ms)
+  50%   9576
+  66%  10462
+  75%  10881
+  80%  11306
+  90%  12746
+  95%  13703
+  98%  14877
+  99%  15983
+ 100%  16421 (longest request)
+```
+
+* 使用Varnish请求流媒体资源，并发30个
+
+```
+ab -n 200 -c 30 http://192.168.1.101:8080/data/ring/20090925/47541/1289369.mp3
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 192.168.1.101 (be patient)
+Completed 100 requests
+Completed 200 requests
+Finished 200 requests
+
+
+Server Software:        nginx/0.8.46
+Server Hostname:        192.168.1.101
+Server Port:            8080
+
+Document Path:          /data/ring/20090925/47541/1289369.mp3
+Document Length:        874370 bytes
+
+Concurrency Level:      30
+Time taken for tests:   86.679 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      174934106 bytes
+HTML transferred:       174874000 bytes
+Requests per second:    2.31 [#/sec] (mean)
+Time per request:       13001.908 [ms] (mean)
+Time per request:       433.397 [ms] (mean, across all concurrent requests)
+Transfer rate:          1970.87 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        9   83 100.5     45     771
+Processing:  6518 12533 3048.6  12224   21697
+Waiting:       12   61 100.9     40     979
+Total:       6548 12616 3062.2  12429   21723
+
+Percentage of the requests served within a certain time (ms)
+  50%  12429
+  66%  13628
+  75%  14365
+  80%  14881
+  90%  17125
+  95%  18631
+  98%  19900
+  99%  20743
+ 100%  21723 (longest request)
+```
+
+* 不使用Varnish请求流媒体，并发20个
+
+```
+ab -n 200 -c 20 http://192.168.1.101/1289369.mp3
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 192.168.1.101 (be patient)
+Completed 100 requests
+Completed 200 requests
+Finished 200 requests
+
+
+Server Software:        nginx/1.4.7
+Server Hostname:        192.168.1.101
+Server Port:            80
+
+Document Path:          /1289369.mp3
+Document Length:        874370 bytes
+
+Concurrency Level:      20
+Time taken for tests:   95.333 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      174921600 bytes
+HTML transferred:       174874000 bytes
+Requests per second:    2.10 [#/sec] (mean)
+Time per request:       9533.339 [ms] (mean)
+Time per request:       476.667 [ms] (mean, across all concurrent requests)
+Transfer rate:          1791.84 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        5   55  55.5     35     538
+Processing:  3906 9288 2493.6   9128   17836
+Waiting:        2   61  77.9     43     785
+Total:       3943 9343 2493.9   9201   17888
+
+Percentage of the requests served within a certain time (ms)
+  50%   9201
+  66%  10175
+  75%  10619
+  80%  10935
+  90%  12902
+  95%  14188
+  98%  16024
+  99%  17397
+ 100%  17888 (longest request)
+```
+
+
+* 不使用Varnish请求流媒体，并发30个
+
+```
+ab -n 200 -c 30 http://192.168.1.101/1289369.mp3
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 192.168.1.101 (be patient)
+Completed 100 requests
+Completed 200 requests
+Finished 200 requests
+
+
+Server Software:        nginx/1.4.7
+Server Hostname:        192.168.1.101
+Server Port:            80
+
+Document Path:          /1289369.mp3
+Document Length:        874370 bytes
+
+Concurrency Level:      30
+Time taken for tests:   102.131 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      174921600 bytes
+HTML transferred:       174874000 bytes
+Requests per second:    1.96 [#/sec] (mean)
+Time per request:       15319.686 [ms] (mean)
+Time per request:       510.656 [ms] (mean, across all concurrent requests)
+Transfer rate:          1672.57 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       18   62  65.2     49     507
+Processing:  4651 14863 4008.9  14227   28418
+Waiting:        5   83 117.1     48    1091
+Total:       4715 14925 4012.8  14322   28482
+
+Percentage of the requests served within a certain time (ms)
+  50%  14322
+  66%  16154
+  75%  17140
+  80%  18276
+  90%  20387
+  95%  22312
+  98%  25391
+  99%  26251
+ 100%  28482 (longest request)
+```
+
+可以看出，使用Varnish后，性能有所提升。
