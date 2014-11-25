@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Varnish | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/varnish/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2014-10-05T10:35:40+08:00</updated>
+  <updated>2014-11-25T13:15:32+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA['Varnish 4.0 安装与配置']]></title>
+    <title type="html"><![CDATA[Varnish 4.0 安装与配置]]></title>
     <link href="http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/"/>
     <updated>2014-09-10T11:44:42+08:00</updated>
     <id>http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi</id>
