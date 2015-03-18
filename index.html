@@ -9,14 +9,7 @@
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出&#8221;Stack loop too deep&#8221;这个异常。
-雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。 1
-2
-3
-4
-5
-6
-7 &hellip;">
+  <meta name="description" content="最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。 1、下载源码 下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +63,155 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/05/mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/">Mysql5.5安装与配置方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-05T15:05:31+08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。</p>
+
+<h2>1、下载源码</h2>
+
+<p>下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32.tar.gz</p>
+
+<h2>2、编译前的准备工作</h2>
+
+<p>编译前需要为系统安装一些其他工具支持，包括cmake,bison,gcc-c++,ncurses,automake,autoconf等</p>
+
+<p>添加mysql用户和组</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>groupadd mysql
+</span><span class='line'>useradd -g mysql mysql -s /sbin/nologin</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>3、编译</h2>
+
+<p>编译参数可以参考<a href="http://dev.mysql.com/doc/refman/5.5/en/source-configuration-options.html">文档</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_TCP_PORT=3306 -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DMYSQL_USER=mysql -DWITH_DEBUG=0 -DDEFAULT_CHAESET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -WITH_EXTRA_CHARSETS:STRING=utf8,gbk
+</span><span class='line'>make && make install</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4、启动与停止</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chown -R mysql:mysql /usr/local/mysql
+</span><span class='line'>scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data</span></code></pre></td></tr></table></div></figure>
+
+
+<p>写一个启动停止的脚本</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>mysql_port=3306
+</span><span class='line'>mysql_username="root"
+</span><span class='line'>mysql_passwd="123456"
+</span><span class='line'>mysql_basedir="/usr/local/mysql"
+</span><span class='line'>mysql_conf="/usr/local/mysql/conf"
+</span><span class='line'>
+</span><span class='line'>function_start_mysql()
+</span><span class='line'>{
+</span><span class='line'>  printf "Starting Mysql...\n"
+</span><span class='line'>  /bin/sh ${mysql_basedir}/bin/mysqld_safe --defaults-file=${mysql_conf}f/my.cnf 2&gt;&1 /dev/null &
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>function_stop_mysql()
+</span><span class='line'>{
+</span><span class='line'>  printf "Stop Mysql...\n"
+</span><span class='line'>  ${mysql_basedir}/bin/mysqladmin -u ${mysql_username} -p${mysql_passwd} -S /tmp/mysql.sock shutdown
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>function_restart_mysql()
+</span><span class='line'>{
+</span><span class='line'>  printf "Restarting Mysql...\n"
+</span><span class='line'>  function_stop_mysql
+</span><span class='line'>  sleep 5
+</span><span class='line'>  function_start_mysql
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>if [ "$1" == "start" ]; then
+</span><span class='line'>  function_start_mysql
+</span><span class='line'>elif [ "$1" == "stop" ]; then
+</span><span class='line'>  function_stop_mysql
+</span><span class='line'>elif [ "$1" == "restart" ]; then
+</span><span class='line'>  function_restart_mysql
+</span><span class='line'>else
+</span><span class='line'>  printf "Usage: start|stop|restart\n"
+</span><span class='line'>fi
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1456,6 +1598,10 @@ ldconfig /usr/local/lib
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/05/mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/">Mysql5.5安装与配置方法</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/05/railszhong-strack-loop-too-deepwen-ti-de-jie-jue/">Rails中strack Loop Too Deep 问题的解决</a>
       </li>
     
@@ -1469,10 +1615,6 @@ ldconfig /usr/local/lib
     
       <li class="post">
         <a href="/blog/2014/06/03/develop-weixin-web-server/">开发微信服务器</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/11/use-nginx/">使用Nginx的一些心得体会</a>
       </li>
     
   </ul>
@@ -1492,7 +1634,7 @@ ldconfig /usr/local/lib
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - karidyang -
+  Copyright &copy; 2015 - karidyang -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>， 感谢 <a href="http://gitcafe.com">GitCafe</a> 为本站提供存储空间</span>
 </p>
 

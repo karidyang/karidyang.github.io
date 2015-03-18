@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mysql | karidyang的技术博客]]></title>
+  <link href="http://karidyang.github.io/blog/categories/mysql/atom.xml" rel="self"/>
+  <link href="http://karidyang.github.io/"/>
+  <updated>2015-03-18T17:59:24+08:00</updated>
+  <id>http://karidyang.github.io/</id>
+  <author>
+    <name><![CDATA[karidyang]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql5.5安装与配置方法]]></title>
+    <link href="http://karidyang.github.io/blog/2015/03/05/mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/"/>
+    <updated>2015-03-05T15:05:31+08:00</updated>
+    <id>http://karidyang.github.io/blog/2015/03/05/mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa</id>
+    <content type="html"><![CDATA[<p>最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。</p>
+
+<h2>1、下载源码</h2>
+
+<p>下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32.tar.gz</p>
+
+<h2>2、编译前的准备工作</h2>
+
+<p>编译前需要为系统安装一些其他工具支持，包括cmake,bison,gcc-c++,ncurses,automake,autoconf等</p>
+
+<p>添加mysql用户和组</p>
+
+<p><code>
+groupadd mysql
+useradd -g mysql mysql -s /sbin/nologin
+</code></p>
+
+<h2>3、编译</h2>
+
+<p>编译参数可以参考<a href="http://dev.mysql.com/doc/refman/5.5/en/source-configuration-options.html">文档</a></p>
+
+<p><code>
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DWITH_INNOBASE_STORAGE_ENGINE=1 -DMYSQL_TCP_PORT=3306 -DMYSQL_UNIX_ADDR=/tmp/mysql.sock -DMYSQL_USER=mysql -DWITH_DEBUG=0 -DDEFAULT_CHAESET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -WITH_EXTRA_CHARSETS:STRING=utf8,gbk
+make &amp;&amp; make install
+</code></p>
+
+<h2>4、启动与停止</h2>
+
+<p><code>
+chown -R mysql:mysql /usr/local/mysql
+scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+</code></p>
+
+<p>写一个启动停止的脚本</p>
+
+<p>```</p>
+
+<h1>!/bin/bash</h1>
+
+<p>mysql_port=3306
+mysql_username=&ldquo;root&rdquo;
+mysql_passwd=&ldquo;123456&rdquo;
+mysql_basedir=&ldquo;/usr/local/mysql&rdquo;
+mysql_conf=&ldquo;/usr/local/mysql/conf&rdquo;</p>
+
+<p>function_start_mysql()
+{</p>
+
+<pre><code>printf "Starting Mysql...\n"
+/bin/sh ${mysql_basedir}/bin/mysqld_safe --defaults-file=${mysql_conf}f/my.cnf 2&gt;&amp;1 /dev/null &amp;
+</code></pre>
+
+<p>}</p>
+
+<p>function_stop_mysql()
+{</p>
+
+<pre><code>printf "Stop Mysql...\n"
+${mysql_basedir}/bin/mysqladmin -u ${mysql_username} -p${mysql_passwd} -S /tmp/mysql.sock shutdown
+</code></pre>
+
+<p>}</p>
+
+<p>function_restart_mysql()
+{</p>
+
+<pre><code>printf "Restarting Mysql...\n"
+function_stop_mysql
+sleep 5
+function_start_mysql
+</code></pre>
+
+<p>}</p>
+
+<p>if [ &ldquo;$1&rdquo; == &ldquo;start&rdquo; ]; then</p>
+
+<pre><code>function_start_mysql
+</code></pre>
+
+<p>elif [ &ldquo;$1&rdquo; == &ldquo;stop&rdquo; ]; then</p>
+
+<pre><code>function_stop_mysql
+</code></pre>
+
+<p>elif [ &ldquo;$1&rdquo; == &ldquo;restart&rdquo; ]; then</p>
+
+<pre><code>function_restart_mysql
+</code></pre>
+
+<p>else</p>
+
+<pre><code>printf "Usage: start|stop|restart\n"
+</code></pre>
+
+<p>fi</p>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>
