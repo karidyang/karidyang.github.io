@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 开发 | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/kai-fa/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2016-01-08T11:45:42+08:00</updated>
+  <updated>2016-01-08T11:55:21+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -144,6 +144,45 @@ hasPreviousPage: @users.prev_page</p>
 <li>大图预览 <a href="http://lokeshdhakar.com/projects/lightbox2/">lightbox</a></li>
 <li>图片滚动 <a href="http://jquery.malsup.com/cycle2/">cycle2</a></li>
 </ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[开发APP的步骤]]></title>
+    <link href="http://karidyang.github.io/blog/2015/11/30/develop-new-app-step/"/>
+    <updated>2015-11-30T11:00:10+08:00</updated>
+    <id>http://karidyang.github.io/blog/2015/11/30/develop-new-app-step</id>
+    <content type="html"><![CDATA[<h5>1、Android签名文件、包名、签名字符串</h5>
+
+<h5>2、IOS签名证书、包名</h5>
+
+<h5>3、应用图标，16，28，32，64，80，100，108，120，512</h5>
+
+<h5>4、应用截图 5张，含首页、关于我们、商品详情、支付</h5>
+
+<h5>5、第三方应用注册申请</h5>
+
+<ul>
+<li>微信</li>
+<li><p>微博</p>
+
+<p>  微博需要应用简介图片
+  微博上线前必须要有应用的下载地址（IOS必须在Appstore上线）</p></li>
+<li><p>QQ</p>
+
+<p>  Android 版本申请上线就会发布到 应用宝 市场</p></li>
+<li><p>友盟</p></li>
+</ul>
+
+
+<h5>6、微信支付</h5>
+
+<ul>
+<li>签约资料准备</li>
+<li>商户认证</li>
+<li>API安全密钥设置（需要安装操作证书）</li>
+</ul>
 
 ]]></content>
   </entry>
