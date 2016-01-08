@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rails, | karidyang的技术博客]]></title>
-  <link href="http://karidyang.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <title><![CDATA[Category: 开发 | karidyang的技术博客]]></title>
+  <link href="http://karidyang.github.io/blog/categories/kai-fa/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
   <updated>2016-01-08T11:45:42+08:00</updated>
   <id>http://karidyang.github.io/</id>

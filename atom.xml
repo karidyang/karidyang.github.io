@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2016-01-08T11:42:32+08:00</updated>
+  <updated>2016-01-08T11:45:42+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[我的Rails开发总结]]></title>
+    <link href="http://karidyang.github.io/blog/2016/01/08/wo-de-railskai-fa-zong-jie/"/>
+    <updated>2016-01-08T11:43:50+08:00</updated>
+    <id>http://karidyang.github.io/blog/2016/01/08/wo-de-railskai-fa-zong-jie</id>
+    <content type="html"><![CDATA[<p>[TOC]</p>
+
+<h1>常用Gem列表</h1>
+
+<h3>Rails Auth</h3>
+
+<ul>
+<li><p>devise 验证</p></li>
+<li><p>cancancan 权限控制</p></li>
+</ul>
+
+
+<h3>Rails Frontend</h3>
+
+<ul>
+<li>kaminari 分页控件</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@users = User.all.page(1).per_page(25)
+</span><span class='line'>
+</span><span class='line'>currentPage: @users.current_page,
+</span><span class='line'>totalPages: @users.total_pages,
+</span><span class='line'>totalRows: @users.total_count,
+</span><span class='line'>hasNextPage: @users.next_page,
+</span><span class='line'>hasPreviousPage: @users.prev_page
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>SimpleForm 表单</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>需要执行rails generate simple_form:install --bootstrap</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Popupload 图片上传</li>
+<li>carrierwave-upyun 图片上传</li>
+<li>mini_magick</li>
+<li>carrierwave</li>
+<li>carrierwave-meta</li>
+<li>rest-client</li>
+<li>mime-types</li>
+<li>uuidtools</li>
+</ul>
+
+
+<h3>Rails Test Drive</h3>
+
+<ul>
+<li>ffaker 快速生成测试数据</li>
+</ul>
+
+
+<h3>Rails Helper</h3>
+
+<ul>
+<li>settingslogic</li>
+<li>magic_encoding</li>
+<li><a href="https://github.com/basecamp/local_time">local_time</a></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%= local_time(comment.created_at) %&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>rails-i18n</li>
+<li><a href="https://github.com/Macrow/rails_kindeditor">rails_kindeditor</a></li>
+</ul>
+
+
+<h3>Ruby General</h3>
+
+<ul>
+<li><a href="http://pry.github.com/">pry</a></li>
+</ul>
+
+
+<h4>CSS中引用assets中的图片</h4>
+
+<ol>
+<li>首先必须是scss或sass</li>
+<li>image-url(source) &mdash;> assets/images/sources</li>
+</ol>
+
+
+<h4>Rails中格式化时间</h4>
+
+<ol>
+<li>Add gem &lsquo;local_time&rsquo; to your Gemfile.</li>
+<li>Run bundle install.</li>
+<li>Add //= require local_time to your JavaScript manifest file (usually found at app/assets/javascripts/application.js).</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;%= h local_time(notice.created_at, '%Y-%M-%d') %&gt;
+</span><span class='line'>&lt;%= local_time_ago(time) %&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用Kindeditor</h4>
+
+<p>1、Gem &lsquo;rails_kindeditor&rsquo;
+2、参考 <a href="https://github.com/Macrow/rails_kindeditor">rails_kindeditor</a></p>
+
+<h4>好用的bootstrap插件</h4>
+
+<ol>
+<li><a href="http://silviomoreto.github.io/bootstrap-select/">bootstrap-select</a></li>
+<li><a href="http://markusslima.github.io/bootstrap-filestyle/">bootstrap-filestyle</a></li>
+</ol>
+
+
+<h3>Jquery插件</h3>
+
+<ol>
+<li>全屏遮罩 <a href="http://jquery.malsup.com/block/">blcokUI</a></li>
+<li>大图预览 <a href="http://lokeshdhakar.com/projects/lightbox2/">lightbox</a></li>
+<li>图片滚动 <a href="http://jquery.malsup.com/cycle2/">cycle2</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[开发APP的步骤]]></title>
