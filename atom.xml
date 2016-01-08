@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2015-03-18T17:59:24+08:00</updated>
+  <updated>2016-01-08T11:42:32+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[开发APP的步骤]]></title>
+    <link href="http://karidyang.github.io/blog/2015/11/30/develop-new-app-step/"/>
+    <updated>2015-11-30T11:00:10+08:00</updated>
+    <id>http://karidyang.github.io/blog/2015/11/30/develop-new-app-step</id>
+    <content type="html"><![CDATA[<p>1、 Android签名文件、包名、签名字符串
+2、 IOS签名证书、包名
+3、 应用图标，16，28，32，64，80，100，108，120，512
+4、 应用截图 5张，含首页、关于我们、商品详情、支付
+5、 第三方应用注册申请
+* 微信
+* 微博
+* QQ
+* 友盟</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mysql5.5安装与配置方法]]></title>
@@ -235,7 +252,7 @@
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd varnish-cache/
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd varnish-cache
 </span><span class='line'>sh autogen.sh
 </span><span class='line'>sh configure --prefix=/usr/local/varnish
 </span><span class='line'>make

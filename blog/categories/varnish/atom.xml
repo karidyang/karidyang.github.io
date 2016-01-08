@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Varnish | karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/blog/categories/varnish/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2015-03-18T17:59:24+08:00</updated>
+  <updated>2016-01-08T11:42:32+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -41,7 +41,7 @@ yum install libtool automake autoconf groff libedit-devel ncurses-devel pcre-dev
 <p>3、编译安装</p>
 
 <p><code>
-cd varnish-cache/
+cd varnish-cache
 sh autogen.sh
 sh configure --prefix=/usr/local/varnish
 make

@@ -24,7 +24,7 @@
         <loc>
             http://karidyang.github.io/blog/2014/09/10/varnish-4-dot-0-an-zhuang-yu-pei-zhi/
         </loc>
-        <lastmod>2014-11-25T13:15:14+08:00</lastmod>
+        <lastmod>2015-03-18T18:01:43+08:00</lastmod>
     </url>
     <url>
         <loc>
@@ -39,12 +39,16 @@
         <lastmod>2015-03-18T17:57:27+08:00</lastmod>
     </url>
     <url>
+        <loc>http://karidyang.github.io/blog/2015/11/30/develop-new-app-step/</loc>
+        <lastmod>2015-11-30T11:29:54+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://karidyang.github.io/blog/archives/</loc>
-        <lastmod>2015-03-18T17:57:27+08:00</lastmod>
+        <lastmod>2015-11-30T11:29:54+08:00</lastmod>
     </url>
     <url>
         <loc>http://karidyang.github.io/</loc>
-        <lastmod>2015-03-18T17:57:27+08:00</lastmod>
+        <lastmod>2015-11-30T11:29:54+08:00</lastmod>
     </url>
     <url>
         <loc>http://karidyang.github.io/robots.txt</loc>
