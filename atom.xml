@@ -4,7 +4,7 @@
   <title><![CDATA[karidyang的技术博客]]></title>
   <link href="http://karidyang.github.io/atom.xml" rel="self"/>
   <link href="http://karidyang.github.io/"/>
-  <updated>2016-01-08T11:55:21+08:00</updated>
+  <updated>2016-01-22T17:04:53+08:00</updated>
   <id>http://karidyang.github.io/</id>
   <author>
     <name><![CDATA[karidyang]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[搭建视频播放服务]]></title>
+    <link href="http://karidyang.github.io/blog/2016/01/22/da-jian-shi-pin-bo-fang-fu-wu/"/>
+    <updated>2016-01-22T17:01:46+08:00</updated>
+    <id>http://karidyang.github.io/blog/2016/01/22/da-jian-shi-pin-bo-fang-fu-wu</id>
+    <content type="html"><![CDATA[<h4>安装必备软件</h4>
+
+<ul>
+<li>libx264
+得到安装源代码 git clone git://git.videolan.org/x264.git
+编译</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure --disable-yasm --enable-shared --enable-static
+</span><span class='line'>make && make install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>把so包增加到系统中</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>echo '/usr/local/lib/' &gt;&gt; /etc/ld.so.conf
+</span><span class='line'>ldconfig</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>ffmpeg
+下载 <a href="http://ffmpeg.org/releases/ffmpeg-2.7.2.tar.bz2">http://ffmpeg.org/releases/ffmpeg-2.7.2.tar.bz2</a>
+编译 ./configure &mdash;disable-yasm</li>
+</ul>
+
+
+<h4>使用</h4>
+
+<p>把mp4文件分割为多个ts文件和m3u8</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ffmpeg -i 2001045000007.mp4 -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 15 -hls_list_size 0 output.m3u8</span></code></pre></td></tr></table></div></figure>
+
+
+<p>-hls_time n: 设置每片的长度，默认值为2。单位为秒</p>
+
+<p>-hls_list_size n:设置播放列表保存的最多条目，设置为0会保存有所片信息，默认值为5</p>
+
+<p>-hls_wrap n:设置多少片之后开始覆盖，如果设置为0则不会覆盖，默认值为0.这个选项能够避免在磁盘上存储过多的片，而且能够限制写入磁盘的最多的片的数量</p>
+
+<p>-hls_start_number n:设置播放列表中sequence number的值为number，默认值为0</p>
+
+<p>注意：播放列表的sequence number 对每个segment来说都必须是唯一的，而且它不能和片的文件名（当使用wrap选项时，文件名有可能会重复使用）混淆</p>
+
+<p>生成的m3u8文件内容如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat output.m3u8
+</span><span class='line'>#EXTM3U
+</span><span class='line'>#EXT-X-VERSION:3
+</span><span class='line'>#EXT-X-TARGETDURATION:22
+</span><span class='line'>#EXT-X-MEDIA-SEQUENCE:0
+</span><span class='line'>#EXTINF:21.050000,
+</span><span class='line'>output0.ts
+</span><span class='line'>#EXTINF:11.000000,
+</span><span class='line'>output1.ts
+</span><span class='line'>#EXTINF:13.500000,
+</span><span class='line'>output2.ts
+</span><span class='line'>#EXTINF:14.500000,
+</span><span class='line'>output3.ts
+</span><span class='line'>#EXTINF:16.500000,
+</span><span class='line'>output4.ts
+</span><span class='line'>#EXTINF:19.600000,
+</span><span class='line'>output5.ts
+</span><span class='line'>#EXTINF:8.900000,
+</span><span class='line'>output6.ts
+</span><span class='line'>#EXTINF:14.950000,
+</span><span class='line'>output7.ts
+</span><span class='line'>#EXTINF:15.050000,
+</span><span class='line'>output8.ts
+</span><span class='line'>#EXTINF:15.600000,
+</span><span class='line'>output9.ts
+</span><span class='line'>#EXTINF:15.750000,
+</span><span class='line'>output10.ts
+</span><span class='line'>#EXTINF:14.000000,
+</span><span class='line'>output11.ts
+</span><span class='line'>#EXTINF:14.700000,
+</span><span class='line'>output12.ts
+</span><span class='line'>#EXTINF:15.350000,
+</span><span class='line'>output13.ts
+</span><span class='line'>#EXTINF:15.000000,
+</span><span class='line'>output14.ts
+</span><span class='line'>#EXTINF:10.600000,
+</span><span class='line'>output15.ts
+</span><span class='line'>#EXT-X-ENDLIST</span></code></pre></td></tr></table></div></figure>
+
+
+<p>搭建hls播放服务</p>
+
+<ul>
+<li>参考《做自己的m3u8点播系统使用HTTP Live Streaming(HLS技术）》</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[我的Rails开发总结]]></title>
