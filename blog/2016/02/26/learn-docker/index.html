@@ -5,11 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rails, - karidyang的技术博客</title>
+  <title>学习Docker - karidyang的技术博客</title>
   <meta name="author" content="karidyang">
 
   
-  <meta name="description" content="Category: Rails,">
+  <meta name="description" content="Docker是什么 Docker是一个容器
+Docker基本命令 创建Ubuntu系统的容器 docker run -it ubuntu:14.04 /bin/bash
+查看当前所有容器 docker ps -a
+删除容器 docker rm {容器ID/名称}
+发布容器 docker &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://karidyang.github.ioblog/categories/rails">
+  <link rel="canonical" href="http://karidyang.github.io/blog/2016/02/26/learn-docker">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="karidyang的技术博客" type="application/atom+xml">
@@ -62,35 +66,136 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rails,</h1>
+    
+      <h1 class="entry-title">学习Docker</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-26T13:28:55+08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2016</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><ol>
+<li><p>Docker是什么
+ Docker是一个容器</p></li>
+<li><p>Docker基本命令</p>
 
-  
-  <h2>2016</h2>
+<ul>
+<li>创建Ubuntu系统的容器 <code>docker run -it ubuntu:14.04 /bin/bash</code></li>
+<li>查看当前所有容器 <code>docker ps -a</code></li>
+<li>删除容器 <code>docker rm {容器ID/名称}</code></li>
+<li>发布容器 <code>docker commit</code></li>
+<li>绑定随机端口 <code>docker run -d -P --name {容器名} ubuntu:14.04 /bin/bash</code></li>
+<li>绑定指定端口 <code>docker run -d -p {本机ip}:{本机端口}:{容器端口} --name {容器名} ubuntu:14.04 /bin/bash</code></li>
+<li>挂载本机目录 <code>docker run -d -v `pwd`:/webapp ubuntu:14.04 /bin/bash</code></li>
+</ul>
+</li>
+<li><p>Dockerfile</p>
 
-<article>
-  
-<h1><a href="/blog/2016/01/08/wo-de-railskai-fa-zong-jie/">我的Rails开发总结</a></h1>
-<time datetime="2016-01-08T11:43:50+08:00" pubdate><span class='month'>Jan</span> <span class='day'>08</span> <span class='year'>2016</span></time>
+<p> 使用Dockerfile可以比较方便的统一完成容器的搭建、配置工作
+ 一个比较完整的文件示例如下
+ &#8220;`
+ #Version 1.0.1
+ From ubuntu:14.04   #基本镜像</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails,</a>, <a class='category' href='/blog/categories/kai-fa/'>开发</a></span>
-</footer>
+<p> MAINTAINER xxx &ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#120;&#120;&#x78;&#64;&#x78;&#120;&#120;&#x2e;&#120;&#120;">&#x78;&#120;&#120;&#64;&#x78;&#120;&#x78;&#x2e;&#120;&#120;</a>&rdquo; #镜像作者信息</p>
 
+<p> #设置root用户为后续命令的执行者
+ USER root</p>
 
-</article>
+<p> #执行操作
+ RUN apt-get update
+ RUN apt-get install -y nginx</p>
+
+<p> #使用&amp;&amp;拼接命令
+ RUN touch test.txt &amp;&amp; echo &lsquo;test&rsquo; >> test.txt</p>
+
+<p> #对外暴露端口
+ EXPOSE 80 8080 9000</p>
+
+<p> #添加文件
+ ADD abc.txt /opt
+ #添加网络文件
+ ADD <a href="http://xxx">http://xxx</a> /opt</p>
+
+<p> #设置环境变量
+ ENV WEB_PORT=80</p>
+
+<p> #设置工作目录
+ WORKDIR /opt/</p>
+
+<p> #设置卷
+ VOLUME [&ldquo;/data&rdquo;, &ldquo;/var/www&rdquo;]</p>
+
+<p> &#8220;`</p></li>
+</ol>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">karidyang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-26T13:28:55+08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/docker/'>Docker</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/01/22/da-jian-shi-pin-bo-fang-fu-wu/" title="Previous Post: 搭建视频播放服务">&laquo; 搭建视频播放服务</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>

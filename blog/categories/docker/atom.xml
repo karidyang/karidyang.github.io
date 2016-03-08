@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Docker | karidyang的技术博客]]></title>
+  <link href="http://karidyang.github.io/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="http://karidyang.github.io/"/>
+  <updated>2016-03-08T13:12:25+08:00</updated>
+  <id>http://karidyang.github.io/</id>
+  <author>
+    <name><![CDATA[karidyang]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[学习Docker]]></title>
+    <link href="http://karidyang.github.io/blog/2016/02/26/learn-docker/"/>
+    <updated>2016-02-26T13:28:55+08:00</updated>
+    <id>http://karidyang.github.io/blog/2016/02/26/learn-docker</id>
+    <content type="html"><![CDATA[<ol>
+<li><p>Docker是什么
+ Docker是一个容器</p></li>
+<li><p>Docker基本命令</p>
+
+<ul>
+<li>创建Ubuntu系统的容器 <code>docker run -it ubuntu:14.04 /bin/bash</code></li>
+<li>查看当前所有容器 <code>docker ps -a</code></li>
+<li>删除容器 <code>docker rm {容器ID/名称}</code></li>
+<li>发布容器 <code>docker commit</code></li>
+<li>绑定随机端口 <code>docker run -d -P --name {容器名} ubuntu:14.04 /bin/bash</code></li>
+<li>绑定指定端口 <code>docker run -d -p {本机ip}:{本机端口}:{容器端口} --name {容器名} ubuntu:14.04 /bin/bash</code></li>
+<li>挂载本机目录 <code>docker run -d -v `pwd`:/webapp ubuntu:14.04 /bin/bash</code></li>
+</ul>
+</li>
+<li><p>Dockerfile</p>
+
+<p> 使用Dockerfile可以比较方便的统一完成容器的搭建、配置工作
+ 一个比较完整的文件示例如下
+ ```
+ #Version 1.0.1
+ From ubuntu:14.04   #基本镜像</p>
+
+<p> MAINTAINER xxx &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x78;&#120;&#x78;&#64;&#120;&#120;&#120;&#46;&#120;&#120;">&#x78;&#x78;&#x78;&#64;&#120;&#x78;&#120;&#46;&#120;&#x78;</a>&rdquo; #镜像作者信息</p>
+
+<p> #设置root用户为后续命令的执行者
+ USER root</p>
+
+<p> #执行操作
+ RUN apt-get update
+ RUN apt-get install -y nginx</p>
+
+<p> #使用&amp;&amp;拼接命令
+ RUN touch test.txt &amp;&amp; echo &lsquo;test&rsquo; >> test.txt</p>
+
+<p> #对外暴露端口
+ EXPOSE 80 8080 9000</p>
+
+<p> #添加文件
+ ADD abc.txt /opt
+ #添加网络文件
+ ADD <a href="http://xxx">http://xxx</a> /opt</p>
+
+<p> #设置环境变量
+ ENV WEB_PORT=80</p>
+
+<p> #设置工作目录
+ WORKDIR /opt/</p>
+
+<p> #设置卷
+ VOLUME [&ldquo;/data&rdquo;, &ldquo;/var/www&rdquo;]</p>
+
+<p> ```</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
