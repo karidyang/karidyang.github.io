@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>开发微信服务器 | Hexo</title>
+  <title>开发微信服务器 | 逆水前行</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="最近做了一个微信的商户平台，有些心得，和大家分享一下。 一、申请帐号首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元&#x2F;年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看微信公众平台开发者文档。 二、接入1、申请消息接口在公众平台网站的高级功能 – 开发模式页，点击“成为开">
 <meta property="og:type" content="article">
 <meta property="og:title" content="开发微信服务器">
 <meta property="og:url" content="http://example.com/2014/06/03/2014-06-03-develop-weixin-web-server/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="逆水前行">
 <meta property="og:description" content="最近做了一个微信的商户平台，有些心得，和大家分享一下。 一、申请帐号首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元&#x2F;年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看微信公众平台开发者文档。 二、接入1、申请消息接口在公众平台网站的高级功能 – 开发模式页，点击“成为开">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-06-03T01:40:49.000Z">
 <meta property="article:modified_time" content="2021-04-22T08:50:08.067Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="karidyang">
 <meta property="article:tag" content="java, weixin">
 <meta name="twitter:card" content="summary">
   
@@ -41,7 +41,7 @@
     <div id="header-inner" class="inner">
       <nav id="sub-nav">
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
@@ -60,7 +60,7 @@
     </div>
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">逆水前行</a>
       </h1>
       
     </div>
@@ -138,7 +138,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2014/06/03/2014-06-03-develop-weixin-web-server/" data-id="cknso7tey0003o95y9kfqc7z5" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2014/06/03/2014-06-03-develop-weixin-web-server/" data-id="cknsom0c700045e5ya8o8bvge" class="article-share-link">分享</a>
       
       
       
@@ -152,7 +152,7 @@
 <script src="/jquery/jquery.min.js"></script>
 
   <div id="random_posts">
-    <h2>Recommended Posts</h2>
+    <h2>推荐文章</h2>
     <div class="random_posts_ul">
       <script>
           var random_count =4
@@ -195,7 +195,7 @@
 <nav id="article-nav">
   
     <a href="/2014/08/04/2014-08-04-deploy-rails-production/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
           部署rails生产环境
@@ -205,7 +205,7 @@
   
   
     <a href="/2014/03/11/2014-03-11-use-nginx/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">使用Nginx的一些心得体会</div>
     </a>
   
@@ -240,7 +240,7 @@
     
       <div class="widget" id="toc-widget-fixed">
       
-        <strong class="toc-title">Content</strong>
+        <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
               <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%94%B3%E8%AF%B7%E5%B8%90%E5%8F%B7"><span class="toc-number">1.</span> <span class="toc-text">一、申请帐号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8E%A5%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">二、接入</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81%E7%94%B3%E8%AF%B7%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">1、申请消息接口</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81URL%E6%9C%89%E6%95%88%E6%80%A7"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">2、验证URL有效性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81%E6%88%90%E4%B8%BA%E5%BC%80%E5%8F%91%E8%80%85"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">3、成为开发者</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%BE%E7%BD%AE%E8%8F%9C%E5%8D%95"><span class="toc-number">3.</span> <span class="toc-text">三、设置菜单</span></a></li></ol>
           </div>
@@ -271,11 +271,11 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2021 John Doe&nbsp;|&nbsp;
-      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+      &copy; 2014 - 2021 karidyang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">
-      Contact&nbsp;|&nbsp;karidyang@gmail.com
+      联系方式&nbsp;|&nbsp;karidyang@gmail.com
     </div>
   </div>
 </footer>
