@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Mysql5.5安装与配置方法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。 1、下载源码下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32.tar.gz 2、编译前的准备工作编译前需要为系统安装一些其他工具支持，包括cmake,bison,g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql5.5安装与配置方法">
+<meta property="og:url" content="http://example.com/2015/03/05/2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。 1、下载源码下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32.tar.gz 2、编译前的准备工作编译前需要为系统安装一些其他工具支持，包括cmake,bison,g">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2015-03-05T07:05:31.000Z">
+<meta property="article:modified_time" content="2021-04-22T08:47:55.131Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/05/2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/" class="article-date">
+  <time datetime="2015-03-05T07:05:31.000Z" itemprop="datePublished">2015-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql5.5安装与配置方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>最新的Mysql5.5的源码安装已经不能再用configure的方式了，改成了cmake的编译方式，本文主要用于学习和记录mysql的基本安装方法。</p>
+<h2 id="1、下载源码"><a href="#1、下载源码" class="headerlink" title="1、下载源码"></a>1、下载源码</h2><p>下载源码可以到mysql官网上下载，不过需要注意的是，一定要选择Source Code的方式，下载下来的文件为mysql-5.5.32.tar.gz</p>
+<h2 id="2、编译前的准备工作"><a href="#2、编译前的准备工作" class="headerlink" title="2、编译前的准备工作"></a>2、编译前的准备工作</h2><p>编译前需要为系统安装一些其他工具支持，包括cmake,bison,gcc-c++,ncurses,automake,autoconf等</p>
+<p>添加mysql用户和组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groupadd mysql</span><br><span class="line">useradd -g mysql mysql -s &#x2F;sbin&#x2F;nologin</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、编译"><a href="#3、编译" class="headerlink" title="3、编译"></a>3、编译</h2><p>编译参数可以参考<a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.5/en/source-configuration-options.html">文档</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_INSTALL_PREFIX&#x3D;&#x2F;usr&#x2F;local&#x2F;mysql -DMYSQL_DATADIR&#x3D;&#x2F;usr&#x2F;local&#x2F;mysql&#x2F;data -DWITH_INNOBASE_STORAGE_ENGINE&#x3D;1 -DMYSQL_TCP_PORT&#x3D;3306 -DMYSQL_UNIX_ADDR&#x3D;&#x2F;tmp&#x2F;mysql.sock -DMYSQL_USER&#x3D;mysql -DWITH_DEBUG&#x3D;0 -DDEFAULT_CHAESET&#x3D;utf8 -DDEFAULT_COLLATION&#x3D;utf8_general_ci -WITH_EXTRA_CHARSETS:STRING&#x3D;utf8,gbk</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、启动与停止"><a href="#4、启动与停止" class="headerlink" title="4、启动与停止"></a>4、启动与停止</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown -R mysql:mysql &#x2F;usr&#x2F;local&#x2F;mysql</span><br><span class="line">scripts&#x2F;mysql_install_db --user&#x3D;mysql --basedir&#x3D;&#x2F;usr&#x2F;local&#x2F;mysql --datadir&#x3D;&#x2F;usr&#x2F;local&#x2F;mysql&#x2F;data</span><br></pre></td></tr></table></figure>
+
+<p>写一个启动停止的脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">mysql_port&#x3D;3306</span><br><span class="line">mysql_username&#x3D;&quot;root&quot;</span><br><span class="line">mysql_passwd&#x3D;&quot;123456&quot;</span><br><span class="line">mysql_basedir&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;mysql&quot;</span><br><span class="line">mysql_conf&#x3D;&quot;&#x2F;usr&#x2F;local&#x2F;mysql&#x2F;conf&quot;</span><br><span class="line"></span><br><span class="line">function_start_mysql()</span><br><span class="line">&#123;</span><br><span class="line">	printf &quot;Starting Mysql...\n&quot;</span><br><span class="line">	&#x2F;bin&#x2F;sh $&#123;mysql_basedir&#125;&#x2F;bin&#x2F;mysqld_safe --defaults-file&#x3D;$&#123;mysql_conf&#125;f&#x2F;my.cnf 2&gt;&amp;1 &#x2F;dev&#x2F;null &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function_stop_mysql()</span><br><span class="line">&#123;</span><br><span class="line">	printf &quot;Stop Mysql...\n&quot;</span><br><span class="line">	$&#123;mysql_basedir&#125;&#x2F;bin&#x2F;mysqladmin -u $&#123;mysql_username&#125; -p$&#123;mysql_passwd&#125; -S &#x2F;tmp&#x2F;mysql.sock shutdown</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function_restart_mysql()</span><br><span class="line">&#123;</span><br><span class="line">	printf &quot;Restarting Mysql...\n&quot;</span><br><span class="line">	function_stop_mysql</span><br><span class="line">	sleep 5</span><br><span class="line">	function_start_mysql</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if [ &quot;$1&quot; &#x3D;&#x3D; &quot;start&quot; ]; then</span><br><span class="line">	function_start_mysql</span><br><span class="line">elif [ &quot;$1&quot; &#x3D;&#x3D; &quot;stop&quot; ]; then</span><br><span class="line">	function_stop_mysql</span><br><span class="line">elif [ &quot;$1&quot; &#x3D;&#x3D; &quot;restart&quot; ]; then</span><br><span class="line">	function_restart_mysql</span><br><span class="line">else</span><br><span class="line">	printf &quot;Usage: start|stop|restart\n&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2015/03/05/2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/" data-id="cknso7tf3000bo95y8zwzf7xr" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>Recommended Posts</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2015/11/30/2015-11-30-develop-new-app-step/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          开发APP的步骤
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/10/05/2014-10-05-railszhong-strack-loop-too-deepwen-ti-de-jie-jue/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">rails中strack loop too deep 问题的解决</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">Content</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text">1、下载源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E7%BC%96%E8%AF%91%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">2、编译前的准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E7%BC%96%E8%AF%91"><span class="toc-number">3.</span> <span class="toc-text">3、编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%81%9C%E6%AD%A2"><span class="toc-number">4.</span> <span class="toc-text">4、启动与停止</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 John Doe&nbsp;|&nbsp;
+      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      Contact&nbsp;|&nbsp;karidyang@gmail.com
+    </div>
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

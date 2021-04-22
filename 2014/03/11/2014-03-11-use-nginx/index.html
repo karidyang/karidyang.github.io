@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用Nginx的一些心得体会 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1、安装Nginx在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。 首先需要下载源码包，可以在这里下载nginx 下载之后就需要安装。 tar -zxvf nginx-1.4.2.tar.gz cd nginx-1.4.2 .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Nginx的一些心得体会">
+<meta property="og:url" content="http://example.com/2014/03/11/2014-03-11-use-nginx/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1、安装Nginx在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。 首先需要下载源码包，可以在这里下载nginx 下载之后就需要安装。 tar -zxvf nginx-1.4.2.tar.gz cd nginx-1.4.2 .&#x2F;configure --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;n">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2014-03-11T10:19:10.000Z">
+<meta property="article:modified_time" content="2021-04-22T08:50:31.819Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-03-11-use-nginx" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/03/11/2014-03-11-use-nginx/" class="article-date">
+  <time datetime="2014-03-11T10:19:10.000Z" itemprop="datePublished">2014-03-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Nginx的一些心得体会
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h4 id="1、安装Nginx"><a href="#1、安装Nginx" class="headerlink" title="1、安装Nginx"></a>1、安装Nginx</h4><p>在linux上安装nginx，可以使用源码安装，也可以使用包安装器安装，如 apt-get, yum等，使用包安装器安装比较简单，所以，这里我们介绍源码安装。</p>
+<p>首先需要下载源码包，可以在这里下载<a target="_blank" rel="noopener" href="http://nginx.org/download/nginx-1.4.2.tar.gz">nginx</a></p>
+<p>下载之后就需要安装。</p>
+<pre><code>tar -zxvf nginx-1.4.2.tar.gz
+cd nginx-1.4.2
+./configure --prefix=/usr/local/nginx_8080 --user=www --group=www  --with-http_stub_status_module --without-http_fastcgi_module --without-http_autoindex_module --without-http_ssi_module --without-mail_pop3_module --without-mail_imap_module --without-mail_smtp_module --without-http_uwsgi_module --without-http_scgi_module  --without-http_memcached_module
+make
+make  install
+</code></pre>
+<p>说明：</p>
+<p>–prefix : 安装目录<br/><br>–user: linux中的用户<br/><br>–group: linux中的用户组<br/><br>–with-http_stub_status_module : 安装http_status模块<br/><br>–without-http_fastcgi_module : 如不需要后端接入php、asp等可以不安装fastcgi模块<br/><br>–without-http_autoindex_module : 不安装文件目录索引模块<br/><br>–without-http_ssi_module : 不安装https模块<br/><br>–without-mail_pop3_module –without-mail_imap_module –without-mail_smtp_module : 不安装mail模块<br/><br>–without-http_memcached_module : 不安装memcached模块<br/></p>
+<p>编译以后，会在安装目录下找到conf目录，我们后面的主要配置就是编辑这个目录下的nginx.conf文件。</p>
+<h4 id="2、配置"><a href="#2、配置" class="headerlink" title="2、配置"></a>2、配置</h4>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2014/03/11/2014-03-11-use-nginx/" data-id="cknso7tez0004o95y8lkd6i7m" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>Recommended Posts</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/03/2014-06-03-develop-weixin-web-server/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          开发微信服务器
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/03/11/2014-03-11-use-imagemagick/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用ImageMagick处理图片</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">Content</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85Nginx"><span class="toc-number">1.</span> <span class="toc-text">1、安装Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">2、配置</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 John Doe&nbsp;|&nbsp;
+      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      Contact&nbsp;|&nbsp;karidyang@gmail.com
+    </div>
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>

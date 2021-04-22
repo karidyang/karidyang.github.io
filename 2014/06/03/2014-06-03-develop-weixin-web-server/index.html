@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>开发微信服务器 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近做了一个微信的商户平台，有些心得，和大家分享一下。 一、申请帐号首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元&#x2F;年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看微信公众平台开发者文档。 二、接入1、申请消息接口在公众平台网站的高级功能 – 开发模式页，点击“成为开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开发微信服务器">
+<meta property="og:url" content="http://example.com/2014/06/03/2014-06-03-develop-weixin-web-server/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近做了一个微信的商户平台，有些心得，和大家分享一下。 一、申请帐号首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元&#x2F;年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看微信公众平台开发者文档。 二、接入1、申请消息接口在公众平台网站的高级功能 – 开发模式页，点击“成为开">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2014-06-03T01:40:49.000Z">
+<meta property="article:modified_time" content="2021-04-22T08:50:08.067Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="java, weixin">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-06-03-develop-weixin-web-server" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/06/03/2014-06-03-develop-weixin-web-server/" class="article-date">
+  <time datetime="2014-06-03T01:40:49.000Z" itemprop="datePublished">2014-06-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      开发微信服务器
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>最近做了一个微信的商户平台，有些心得，和大家分享一下。</p>
+<h3 id="一、申请帐号"><a href="#一、申请帐号" class="headerlink" title="一、申请帐号"></a>一、申请帐号</h3><p>首先肯定需要注册一个公众平台帐号了，现在注册就能免费成为订阅号，能使用一些基本的接口功能，如：接收消息，发送消息等。而高级的功能，必须是认证的商户，并且缴纳300元/年的认证费（有点坑啊，一年交一次）。具体的接口文档，可以去查看<a target="_blank" rel="noopener" href="https://open.weixin.qq.com/cgi-bin/frame?t=resource/res_main_tmpl&lang=zh_CN">微信公众平台开发者文档</a>。</p>
+<h3 id="二、接入"><a href="#二、接入" class="headerlink" title="二、接入"></a>二、接入</h3><h6 id="1、申请消息接口"><a href="#1、申请消息接口" class="headerlink" title="1、申请消息接口"></a>1、申请消息接口</h6><p>在公众平台网站的高级功能 – 开发模式页，点击“成为开发者”按钮，填写URL和Token，其中URL是开发者用来接收微信服务器数据的接口URL。Token可由开发者任意填写，用作生成签名（该Token会和接口URL中包含的Token进行比对，从而验证安全性）。 </p>
+<h6 id="2、验证URL有效性"><a href="#2、验证URL有效性" class="headerlink" title="2、验证URL有效性"></a>2、验证URL有效性</h6><p>微信服务器会对你刚才填的URL做GET请求，并带上下面4个参数</p>
+<table>
+<thead>
+<tr>
+<td>参数</td>
+<td>描述</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>signature</td>
+<td>微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数。</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>时间戳</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>随机数</td>
+</tr>
+<tr>
+<td>echostr</td>
+<td>随机字符串</td>
+</tr>
+</tbody>
+</table>
+
+<p>开发者通过检验signature对请求进行校验（下面有校验方式）。若确认此次GET请求来自微信服务器，请原样返回echostr参数内容，则接入生效，成为开发者成功，否则接入失败。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">加密&#x2F;校验流程如下：</span><br><span class="line">1. 将token、timestamp、nonce三个参数进行字典序排序</span><br><span class="line">2. 将三个参数字符串拼接成一个字符串进行sha1加密</span><br><span class="line">3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信</span><br></pre></td></tr></table></figure>
+
+<p>检验signature的Java示例代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 签名校验工具类</span><br><span class="line"> * Created by karidyang on 14-2-23.</span><br><span class="line"> *&#x2F;</span><br><span class="line">public class SignUtils &#123;</span><br><span class="line">    public static final String TOKEN &#x3D; &quot;&quot;;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 验证签名</span><br><span class="line">     * @param signature 签名</span><br><span class="line">     * @param timestamp 时间戳</span><br><span class="line">     * @param nonce 随机码</span><br><span class="line">     * @return 校验是否成功</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public static boolean checkSign(String signature, String timestamp, String nonce) &#123;</span><br><span class="line">        if (signature &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        try &#123;</span><br><span class="line">            MessageDigest messageDigest &#x3D; MessageDigest.getInstance(&quot;SHA-1&quot;);</span><br><span class="line"></span><br><span class="line">            String[] arr &#x3D; new String[] &#123; TOKEN, timestamp, nonce &#125;;</span><br><span class="line">            Arrays.sort(arr);</span><br><span class="line">            String str &#x3D; StringUtils.join(arr,&quot;&quot;);</span><br><span class="line">            byte[] digest &#x3D; messageDigest.digest(str.getBytes());</span><br><span class="line">            String tmpStr &#x3D; byteToStr(digest);</span><br><span class="line">            return tmpStr !&#x3D; null &amp;&amp; tmpStr.equals(signature.toUpperCase());</span><br><span class="line"></span><br><span class="line">        &#125; catch (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 将字节数组转换为十六进制字符串</span><br><span class="line">     *</span><br><span class="line">     * @param byteArray</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private static String byteToStr(byte[] byteArray) &#123;</span><br><span class="line">        String strDigest &#x3D; &quot;&quot;;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; byteArray.length; i++) &#123;</span><br><span class="line">            strDigest +&#x3D; byteToHexStr(byteArray[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        return strDigest;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 将字节转换为十六进制字符串</span><br><span class="line">     *</span><br><span class="line">     * @param mByte</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    private static String byteToHexStr(byte mByte) &#123;</span><br><span class="line">        char[] Digit &#x3D; &#123; &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39; &#125;;</span><br><span class="line">        char[] tempArr &#x3D; new char[2];</span><br><span class="line">        tempArr[0] &#x3D; Digit[(mByte &gt;&gt;&gt; 4) &amp; 0X0F];</span><br><span class="line">        tempArr[1] &#x3D; Digit[mByte &amp; 0X0F];</span><br><span class="line"></span><br><span class="line">        String s &#x3D; new String(tempArr);</span><br><span class="line">        return s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="3、成为开发者"><a href="#3、成为开发者" class="headerlink" title="3、成为开发者"></a>3、成为开发者</h6><p>验证URL有效性成功后即接入生效，成为开发者。如果公众号类型为服务号（订阅号只能使用普通消息接口），可以在公众平台网站中申请认证，认证成功的服务号将获得众多接口权限，以满足开发者需求。</p>
+<p>此后用户每次向公众号发送消息、或者产生自定义菜单点击事件时，响应URL将得到推送。</p>
+<p>公众号调用各接口时，一般会获得正确的结果，具体结果可见对应接口的说明。返回错误时，可根据返回码来查询错误原因。全局返回码说明</p>
+<p>用户向公众号发送消息时，公众号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众号有一个唯一的OpenID。</p>
+<p>此外请注意，微信公众号接口只支持80接口。</p>
+<h3 id="三、设置菜单"><a href="#三、设置菜单" class="headerlink" title="三、设置菜单"></a>三、设置菜单</h3><p>微信设置菜单的方式比较简单，就是POST一个JSON格式的菜单数据到微信服务器就行了，只是不同的菜单按钮对应不同的功能，比如可点击的，或者执行某项请求的，或者是跳转的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2014/06/03/2014-06-03-develop-weixin-web-server/" data-id="cknso7tey0003o95y9kfqc7z5" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java-weixin/" rel="tag">java, weixin</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>Recommended Posts</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2014/08/04/2014-08-04-deploy-rails-production/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          部署rails生产环境
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/03/11/2014-03-11-use-nginx/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Nginx的一些心得体会</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">Content</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%94%B3%E8%AF%B7%E5%B8%90%E5%8F%B7"><span class="toc-number">1.</span> <span class="toc-text">一、申请帐号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8E%A5%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">二、接入</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81%E7%94%B3%E8%AF%B7%E6%B6%88%E6%81%AF%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">1、申请消息接口</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81URL%E6%9C%89%E6%95%88%E6%80%A7"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">2、验证URL有效性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81%E6%88%90%E4%B8%BA%E5%BC%80%E5%8F%91%E8%80%85"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">3、成为开发者</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%BE%E7%BD%AE%E8%8F%9C%E5%8D%95"><span class="toc-number">3.</span> <span class="toc-text">三、设置菜单</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 John Doe&nbsp;|&nbsp;
+      Theme by <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      Contact&nbsp;|&nbsp;karidyang@gmail.com
+    </div>
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
