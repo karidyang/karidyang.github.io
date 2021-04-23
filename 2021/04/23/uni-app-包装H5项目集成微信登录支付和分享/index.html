@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>uni-app 包装H5项目集成微信登录支付和分享 | 逆水前行</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引用UNI-APP的JS12345678910111213141516171819202122232425262728293031&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;var userAgent &#x3D; navigator.userAgent;if (userAgent.indexOf(&amp;#x27;AlipayClient&amp;#x27;) &gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="uni-app 包装H5项目集成微信登录支付和分享">
+<meta property="og:url" content="http://example.com/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/index.html">
+<meta property="og:site_name" content="逆水前行">
+<meta property="og:description" content="引用UNI-APP的JS12345678910111213141516171819202122232425262728293031&lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;var userAgent &#x3D; navigator.userAgent;if (userAgent.indexOf(&amp;#x27;AlipayClient&amp;#x27;) &gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-23T06:22:11.000Z">
+<meta property="article:modified_time" content="2021-04-23T06:25:19.536Z">
+<meta property="article:author" content="karidyang">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">逆水前行</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-uni-app-包装H5项目集成微信登录支付和分享" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" class="article-date">
+  <time datetime="2021-04-23T06:22:11.000Z" itemprop="datePublished">2021-04-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      uni-app 包装H5项目集成微信登录支付和分享
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="引用UNI-APP的JS"><a href="#引用UNI-APP的JS" class="headerlink" title="引用UNI-APP的JS"></a>引用UNI-APP的JS</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line"><span class="keyword">var</span> userAgent = navigator.userAgent;</span><br><span class="line"><span class="keyword">if</span> (userAgent.indexOf(<span class="string">&#x27;AlipayClient&#x27;</span>) &gt; -<span class="number">1</span>) &#123;</span><br><span class="line"><span class="comment">// 支付宝小程序的 JS-SDK 防止 404 需要动态加载，如果不需要兼容支付宝小程序，则无需引用此 JS 文件。</span></span><br><span class="line"><span class="built_in">document</span>.writeln(<span class="string">&#x27;&lt;script src=&quot;https://appx/web-view.min.js&quot;&#x27;</span> + <span class="string">&#x27;&gt;&#x27;</span> + <span class="string">&#x27;&lt;&#x27;</span> + <span class="string">&#x27;/&#x27;</span> + <span class="string">&#x27;script&gt;&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/QQ/i</span>.test(userAgent) &amp;&amp; <span class="regexp">/miniProgram/i</span>.test(userAgent)) &#123;</span><br><span class="line"><span class="comment">// QQ 小程序</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">&#x27;&lt;script type=&quot;text/javascript&quot; src=&quot;https://qqq.gtimg.cn/miniprogram/webview_jssdk/qqjssdk-1.0.0.js&quot;&gt;&lt;\/script&gt;&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/miniProgram/i</span>.test(userAgent) &amp;&amp; <span class="regexp">/micromessenger/i</span>.test(userAgent)) &#123;</span><br><span class="line"><span class="comment">// 微信小程序 JS-SDK 如果不需要兼容微信小程序，则无需引用此 JS 文件。</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">&#x27;&lt;script type=&quot;text/javascript&quot; src=&quot;https://res.wx.qq.com/open/js/jweixin-1.4.0.js&quot;&gt;&lt;\/script&gt;&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/toutiaomicroapp/i</span>.test(userAgent)) &#123;</span><br><span class="line"><span class="comment">// 头条小程序 JS-SDK 如果不需要兼容头条小程序，则无需引用此 JS 文件。</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">&#x27;&lt;script type=&quot;text/javascript&quot; src=&quot;https://s3.pstatp.com/toutiao/tmajssdk/jssdk-1.0.1.js&quot;&gt;&lt;\/script&gt;&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/swan/i</span>.test(userAgent)) &#123;</span><br><span class="line"><span class="comment">// 百度小程序 JS-SDK 如果不需要兼容百度小程序，则无需引用此 JS 文件。</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">&#x27;&lt;script type=&quot;text/javascript&quot; src=&quot;https://b.bdstatic.com/searchbox/icms/searchbox/js/swan-2.0.18.js&quot;&gt;&lt;\/script&gt;&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="regexp">/quickapp/i</span>.test(userAgent)) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// quickapp</span></span><br><span class="line"><span class="built_in">document</span>.write(<span class="string">&#x27;&lt;script type=&quot;text/javascript&quot; src=&quot;https://quickapp/jssdk.webview.min.js&quot;&gt;&lt;\/script&gt;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (!<span class="regexp">/toutiaomicroapp/i</span>.test(userAgent)) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&#x27;.post-message-section&#x27;</span>).style.visibility = <span class="string">&#x27;visible&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;!-- uni 的 SDK --&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span> src=<span class="string">&quot;https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="登录，接收回调参数"><a href="#登录，接收回调参数" class="headerlink" title="登录，接收回调参数"></a>登录，接收回调参数</h2><blockquote>
+<p>userInof 是登录后json序列化编码后的字符串</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;m.zhcn.qfdenge.com&#x2F;uc&#x2F;login?userInfo&#x3D;$&#123;userInfo&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h2><p>使用uni.requestPayment，参考 <a target="_blank" rel="noopener" href="https://uniapp.dcloud.io/api/plugins/payment?id=requestpayment">https://uniapp.dcloud.io/api/plugins/payment?id=requestpayment</a></p>
+<p>其中的orderInfo的格式如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;appid&quot;</span>: <span class="string">&quot;wx0411fa6a39d61297”, </span></span><br><span class="line"><span class="string">&quot;</span>noncestr<span class="string">&quot;: &quot;</span><span class="number">5</span>JigiIJicbq8hQI2”, </span><br><span class="line"><span class="attr">&quot;package&quot;</span>: <span class="string">&quot;Sign=WXPay”, </span></span><br><span class="line"><span class="string">&quot;</span>partnerid<span class="string">&quot;: &quot;</span><span class="number">1230636401</span>”, </span><br><span class="line"><span class="attr">&quot;prepayid&quot;</span>: <span class="string">&quot;wx21204902147233e222e12d451613768000”, </span></span><br><span class="line"><span class="string">&quot;</span>timestamp<span class="string">&quot;: 1571662142, </span></span><br><span class="line"><span class="string">&quot;</span>sign<span class="string">&quot;: “0E5C9B9B1C8D7497A234CCC3C721AB1F&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>HTML页面需要传递过来的是</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;appId&quot;</span>: <span class="string">&quot;wxf09c6920dc0f2230&quot;</span>,</span><br><span class="line"><span class="attr">&quot;partnerId&quot;</span>: <span class="string">&quot;1429576202&quot;</span>,</span><br><span class="line"><span class="attr">&quot;prepayId&quot;</span>: <span class="string">&quot;wx111943147461245fa3922a787fc7260000&quot;</span>,</span><br><span class="line"><span class="attr">&quot;packageValue&quot;</span>: <span class="string">&quot;Sign=WXPay&quot;</span>,</span><br><span class="line"><span class="attr">&quot;noncestr&quot;</span>: <span class="string">&quot;c71PJL2Q9AbuPd7gskqWORr3FoNYDSRA&quot;</span>,</span><br><span class="line"><span class="attr">&quot;timestamp&quot;</span>: <span class="string">&quot;1599824594&quot;</span>,</span><br><span class="line"><span class="attr">&quot;sign&quot;</span>: <span class="string">&quot;86F8C4EC4E8662CBD2DB3C0EC5D82557&quot;</span>,</span><br><span class="line"><span class="attr">&quot;orderNo&quot;</span>: <span class="string">&quot;21812009111551972&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="regexp">/toutiaomicroapp/i</span>.test(userAgent)) &#123;</span><br><span class="line">    <span class="keyword">var</span> orderInfo = <span class="built_in">encodeURIComponent</span>(<span class="built_in">JSON</span>.stringify(result.data));</span><br><span class="line">    uni.navigateTo(&#123;</span><br><span class="line">        url: <span class="string">&quot;/pages/pay/pay?orderInfo=&quot;</span>+orderInfo</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//弹出待查询界面</span></span><br><span class="line">    $.pay(<span class="string">&quot;&quot;</span>, &#123;</span><br><span class="line">        buttonHandler: <span class="function"><span class="keyword">function</span> (<span class="params">layer</span>) </span>&#123;</span><br><span class="line">            submitCheckOrder(orderId, layer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h2><p>添加按钮点击事件，向uni传递消息数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="regexp">/toutiaomicroapp/i</span>.test(userAgent)) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.addEventListener(<span class="string">&#x27;UniAppJSBridgeReady&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">&quot;btn_share&quot;</span>).addEventListener(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> shareUrl = shareData.url;</span><br><span class="line">            <span class="keyword">if</span> (-<span class="number">1</span> == shareUrl.indexOf(<span class="string">&#x27;back=share&#x27;</span>))&#123;</span><br><span class="line">                shareUrl += (-<span class="number">1</span> == shareUrl.indexOf(<span class="string">&#x27;?&#x27;</span>) ? <span class="string">&#x27;?&#x27;</span> : <span class="string">&#x27;&amp;&#x27;</span>) + <span class="string">&#x27;back=share&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            uni.postMessage(&#123;</span><br><span class="line">                data: &#123;</span><br><span class="line">                    title: shareData.title,</span><br><span class="line">                    desc: shareData.desc,</span><br><span class="line">                    link: shareUrl,</span><br><span class="line">                    imgUrl: shareData.icon,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如此,就完成了UNI-APP集成微信登录\支付\分享的功能</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" data-id="ckntxl7830004hk5y5z9s65ij" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/04/23/SpringCloud-Gateway-nacos-sentinel%E5%85%A5%E9%97%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">SpringCloud+Gateway+nacos+sentinel入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8UNI-APP%E7%9A%84JS"><span class="toc-number">1.</span> <span class="toc-text">引用UNI-APP的JS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BB%E5%BD%95%EF%BC%8C%E6%8E%A5%E6%94%B6%E5%9B%9E%E8%B0%83%E5%8F%82%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">登录，接收回调参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%AF%E4%BB%98"><span class="toc-number">3.</span> <span class="toc-text">支付</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E4%BA%AB"><span class="toc-number">4.</span> <span class="toc-text">分享</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 karidyang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;karidyang@gmail.com
+    </div>
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
