@@ -64,6 +64,84 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Spock实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2022-02-11T09:55:47.000Z" itemprop="datePublished">2022-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/">Spock实践</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="Spock是什么？"><a href="#Spock是什么？" class="headerlink" title="Spock是什么？"></a>Spock是什么？</h2><p>Spock是一款国外优秀的测试框架，基于<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>（行为驱动开发）思想实现，功能非常强大。Spock结合Groovy动态语言的特点，提供了各种标签，并采用简单、通用、结构化的描述语言，让编写测试代码更加简洁、高效。<a target="_blank" rel="noopener" href="https://spockframework.org/">官方的介绍</a>如下：</p>
+<p><img src="https://p0.meituan.net/travelcube/4403846a46a805b9cf304187317da94a52377.png" alt="img"></p>
+<blockquote>
+<p>What is it? Spock is a testing and specification framework for Java and Groovy applications. What makes it stand out from the crowd is its beautiful and highly expressive specification language. Thanks to its JUnit runner, Spock is compatible with most IDEs, build tools, and continuous integration servers. Spock is inspired from JUnit, RSpec, jMock, Mockito, Groovy, Scala, Vulcans, and other fascinating life forms.</p>
+</blockquote>
+<p>Spock是一个Java和Groovy`应用的测试和规范框架。之所以能够在众多测试框架中脱颖而出，是因为它优美而富有表现力的规范语言。Spock的灵感来自JUnit、RSpec、jMock、Mockito、Groovy、Scala、Vulcans。</p>
+<p>简单来讲，Spock主要特点如下：</p>
+<ul>
+<li>让测试代码更规范，内置多种标签来规范单元测试代码的语义，测试代码结构清晰，更具可读性，降低后期维护难度。</li>
+<li>提供多种标签，比如：<code>given</code>、<code>when</code>、<code>then</code>、<code>expect</code>、<code>where</code>、<code>with</code>、<code>thrown</code>……帮助我们应对复杂的测试场景。</li>
+<li>使用Groovy这种动态语言来编写测试代码，可以让我们编写的测试代码更简洁，适合敏捷开发，提高编写单元测试代码的效率。</li>
+<li>遵从<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>（行为驱动开发）模式，有助于提升代码的质量。</li>
+<li>IDE兼容性好，自带Mock功能。</li>
+</ul>
+<p>笔者以前实践过PowerMock、Mockito，比原来的Junit好多了，但是现在都是使用的SpringBoot开发项目，大部分的类都是Spring的Bean，使用PowerMock对类Mock并不是很好用，测试起来也算是很麻烦了，那么Spock真的好用吗？</p>
+<p>笔者从美团的技术博客上了解到<a href="#%5BSpock%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E7%BE%8E%E5%9B%A2%E4%BC%98%E9%80%89%E7%9A%84%E5%AE%9E%E8%B7%B5%5D(https://tech.meituan.com/2021/08/06/spock-practice-in-meituan.html)">Spock的实际使用</a>,因此在团队中，我也实践了一把。基本的使用方法，美团的技术文章已经讲的很明白了，那我就讲点不一样的。</p>
+<h2 id="基于Gradle的项目配置"><a href="#基于Gradle的项目配置" class="headerlink" title="基于Gradle的项目配置"></a>基于Gradle的项目配置</h2><p>基于kotlin的Gradle配置build.gradle.kts</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">  <span class="comment">//引入gradle的Groovy插件</span></span><br><span class="line">	groovy</span><br><span class="line">  <span class="comment">//使用jacoco生成测试报告</span></span><br><span class="line">  jacoco</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> spockVersion = <span class="string">&quot;2.0-groovy-2.5&quot;</span></span><br><span class="line">project &#123;</span><br><span class="line">  apply(plugin = <span class="string">&quot;groovy&quot;</span>)</span><br><span class="line">  apply(plugin = <span class="string">&quot;jacoco&quot;</span>)</span><br><span class="line">  </span><br><span class="line">  dependencies &#123;</span><br><span class="line">    </span><br><span class="line">  	testImplementation(<span class="string">&quot;org.codehaus.groovy:groovy:2.5.9&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;org.jetbrains.kotlin:kotlin-test-junit5&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;junit:junit&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;org.springframework.boot:spring-boot-starter-test&quot;</span>) &#123;</span><br><span class="line">       exclude(group = <span class="string">&quot;org.junit.vintage&quot;</span>, module = <span class="string">&quot;junit-vintage-engine&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    testImplementation(<span class="string">&quot;org.spockframework:spock-core:<span class="variable">$spockVersion</span>&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//配置测试源代码目录加上groovy的</span></span><br><span class="line">  sourceSets &#123;</span><br><span class="line"></span><br><span class="line">        test &#123;</span><br><span class="line">            java &#123;srcDirs(<span class="string">&quot;src/test/java&quot;</span>, <span class="string">&quot;src/test/groovy&quot;</span>)&#125;</span><br><span class="line">            resources &#123; srcDir(<span class="string">&quot;src/test/resources&quot;</span>) &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//配置jacoco</span></span><br><span class="line">    tasks.test &#123;</span><br><span class="line">        finalizedBy(tasks.jacocoTestReport)</span><br><span class="line">    &#125;</span><br><span class="line">    tasks.jacocoTestReport &#123;</span><br><span class="line">        dependsOn(tasks.test)</span><br><span class="line">    &#125;</span><br><span class="line">    tasks.withType&lt;Test&gt; &#123;</span><br><span class="line">        useJUnitPlatform()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Mock模拟"><a href="#Mock模拟" class="headerlink" title="Mock模拟"></a>Mock模拟</h2><p>我们的项目现在使用的是Kotlin，Kotlin的类默认是final的，Mock时需要修改类为open，比如</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果标记了Spring的Bean注解（@Service@Repository@Component)等，其实是默认已经修改过了，不需要额外去标记。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FinLogisticsDeductionSpec</span> <span class="title">extends</span> <span class="title">Specification</span> </span>&#123;</span><br><span class="line">    def finLogisticsAccountService = Mock(FinLogisticsAccountService.<span class="keyword">class</span>)</span><br><span class="line">    def finLogisticsDeduction  = new FinLogisticsDeductionAdvanceImpl(finLogisticsAccountService: finLogisticsAccountService)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def <span class="string">&quot;测试 消费&quot;</span>() &#123;</span><br><span class="line">        def req = new FinLogisticsDeductionExecBO(amount: new BigDecimal(<span class="number">100</span>))</span><br><span class="line">        given: <span class="string">&quot;设置消费现金100&quot;</span></span><br><span class="line">        def cash = new BigDecimal(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        and: <span class="string">&quot;扣费服务返回扣费现金100&quot;</span></span><br><span class="line">        finLogisticsAccountService.deduction(req, LogisticsAccountType.ADVANCE) &gt;&gt; cash</span><br><span class="line"></span><br><span class="line">        <span class="keyword">when</span>: <span class="string">&quot;扣费&quot;</span></span><br><span class="line">        def result = finLogisticsDeduction.exec(req)</span><br><span class="line"></span><br><span class="line">        then: <span class="string">&quot;期望结果&quot;</span></span><br><span class="line">        with(result) &#123;</span><br><span class="line">            it == cash</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="多分支条件测试"><a href="#多分支条件测试" class="headerlink" title="多分支条件测试"></a>多分支条件测试</h2><p>项目中经常会遇到同一个方法里面有多个if-else分支的情况，通过Spock的where标签可以非常容易的实现这个。方法名中的#amount，是直接在字符串模板中显示变量的值，可以更直观的显示在测试结果中。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Unroll</span></span><br><span class="line">def <span class="string">&quot;扣费:#amount 当用户现金是:#account.availableCashAmount,红包是:#account.availableAwardAmount, 扣费后现金余额:#cash, 红包余额:#award, 返回剩余金额:#expectResult &quot;</span>() &#123;</span><br><span class="line">    given:</span><br><span class="line">    def bo = new FinLogisticsDeductionExecBO(amount: amount, fromCompanyId: <span class="number">1</span>, comment: <span class="string">&quot;订单扣费&quot;</span>, deductedAfterRecharge: deductedAfterRecharge, billId: <span class="number">1</span>, billNo: <span class="string">&quot;1234546&quot;</span>)</span><br><span class="line">    and:</span><br><span class="line">    finLogisticsAccountItemRepository.selectUnusedList(account.id, <span class="literal">false</span>) &gt;&gt; accountItems</span><br><span class="line">    securityUtils.currentUser() &gt;&gt; currentUser</span><br><span class="line">    finLogisticsAccountItemRepository.updateById(_ <span class="keyword">as</span> FinLogisticsAccountItemEntity) &gt;&gt; <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">when</span>: <span class="string">&quot;扣现金&quot;</span></span><br><span class="line">    def result = tester.loopDeduction(account, bo)</span><br><span class="line"></span><br><span class="line">    then:</span><br><span class="line">    with(result) &#123;</span><br><span class="line">        expectResult == it</span><br><span class="line">        accountItems[<span class="number">0</span>].availableCashBalance == cash</span><br><span class="line">        accountItems[<span class="number">0</span>].availableAwardBalance == award</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">where</span>: <span class="string">&quot;验证分支&quot;</span></span><br><span class="line">    amount | currentUser     | account                | accountItems                | deductedAfterRecharge || cash | award | expectResult</span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">10000</span>, <span class="number">0</span>)   | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)   | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">0</span>, <span class="number">10000</span>)   | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)   | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">5000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">5000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">4000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">4000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">1000</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">1000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">10000</span>, <span class="number">0</span>)   | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)   | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">0</span>, <span class="number">10000</span>)   | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)   | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">5000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">5000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | new AuditData() | getAccount(<span class="number">4000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">4000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">1000</span></span><br><span class="line">    <span class="number">10000</span>  | new AuditData() | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">1000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">0</span>      | <span class="literal">null</span>            | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">6000</span> | <span class="number">5000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">0</span>      | <span class="literal">null</span>            | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">6000</span> | <span class="number">5000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">100</span>    | <span class="literal">null</span>            | getAccount(<span class="number">0</span>, <span class="number">0</span>)       | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)       | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">100</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-img.taoguli.com/img/image-20220211215607514.png" alt="image-20220211215607514"></p>
+<h2 id="异常测试"><a href="#异常测试" class="headerlink" title="异常测试"></a>异常测试</h2><p>对于方法逻辑中会抛出异常的逻辑，可以通过thrown(异常变量)方法来获取异常错误，比如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Unroll</span></span><br><span class="line">    def <span class="string">&quot;测试退款现金不足 #expectedMessage&quot;</span>() &#123;</span><br><span class="line">        given:</span><br><span class="line">        def bo = new FinLogisticsRefundExecBO(cashAmount: cashAmount, awardAmount: awardAmount, fromCompanyId: <span class="number">1</span>, comment: <span class="string">&quot;订单扣费&quot;</span>, billId: <span class="number">1</span>, billNo: <span class="string">&quot;1234546&quot;</span>)</span><br><span class="line">        def account = new FinLogisticsAccountEntity(id: <span class="number">1</span>)</span><br><span class="line">        and:</span><br><span class="line">        finLogisticsAccountItemRepository.selectUnusedList(account.id, <span class="literal">false</span>) &gt;&gt; accountItems</span><br><span class="line">        securityUtils.currentUser() &gt;&gt; currentUser</span><br><span class="line"></span><br><span class="line">        <span class="keyword">when</span>:</span><br><span class="line">        tester.loopRefund(account, bo)</span><br><span class="line">        then:</span><br><span class="line">        def exception = thrown(expectedException)</span><br><span class="line">        exception.message == expectedMessage</span><br><span class="line"></span><br><span class="line">        <span class="keyword">where</span>: <span class="string">&quot;验证分支&quot;</span></span><br><span class="line">        cashAmount | awardAmount | currentUser   | accountItems                  || expectedException | expectedMessage</span><br><span class="line">        <span class="number">20000</span>      | <span class="number">0</span>           | currentUser() | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)     || BaseException     | <span class="string">&quot;退款出错，现金金额不能大于账户现金余额&quot;</span></span><br><span class="line">        <span class="number">20000</span>      | <span class="number">0</span>           | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)         || BaseException     | <span class="string">&quot;退款出错，现金金额不能大于账户现金余额&quot;</span></span><br><span class="line">        <span class="number">0</span>          | <span class="number">20000</span>       | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)     || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line">        <span class="number">10000</span>      | <span class="number">11000</span>       | currentUser() | getAccountItems(<span class="number">10000</span>, <span class="number">10000</span>) || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line">        <span class="number">0</span>          | <span class="number">100</span>         | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)         || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/" data-id="ckzihch2a000m939k39dp9qit" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spock/" rel="tag">Java,Spock</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-uni-app-包装H5项目集成微信登录支付和分享" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" class="article-date">
@@ -114,7 +192,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" data-id="ckntxl7830004hk5y5z9s65ij" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" data-id="ckzihch2c000r939kce6r8tx1" class="article-share-link">分享</a>
       
       
       
@@ -228,7 +306,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/23/SpringCloud-Gateway-nacos-sentinel%E5%85%A5%E9%97%A8/" data-id="ckntxl77p0000hk5y3za7gzu6" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/23/SpringCloud-Gateway-nacos-sentinel%E5%85%A5%E9%97%A8/" data-id="ckzihch2c000q939k7wf571ho" class="article-share-link">分享</a>
       
       
       
@@ -295,7 +373,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/23/%E4%BD%BF%E7%94%A8Ganache%E5%BC%80%E5%8F%91%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" data-id="ckntxl77t0001hk5ybkwfbj7j" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/23/%E4%BD%BF%E7%94%A8Ganache%E5%BC%80%E5%8F%91%E4%BB%A5%E5%A4%AA%E5%9D%8A%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" data-id="ckzihch2d000u939k4fjvhvmj" class="article-share-link">分享</a>
       
       
       
@@ -380,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/04/22/2021%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" data-id="cknsp8yzf000m145y7784gv92" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2021/04/22/2021%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/" data-id="ckzihch29000k939k4ri9dni8" class="article-share-link">分享</a>
       
       
       
@@ -438,7 +516,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2016/02/26/2016-02-26-learn-docker/" data-id="cknsp8yzf000k145y14qs9hcq" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2016/02/26/2016-02-26-learn-docker/" data-id="ckzihch27000i939ke9fu98dg" class="article-share-link">分享</a>
       
       
       
@@ -502,7 +580,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2016/01/22/2016-01-22-da-jian-shi-pin-bo-fang-fu-wu/" data-id="cknsp8yzd000i145yejfn6zk7" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2016/01/22/2016-01-22-da-jian-shi-pin-bo-fang-fu-wu/" data-id="ckzihch27000g939khnwe6zqg" class="article-share-link">分享</a>
       
       
       
@@ -608,7 +686,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2016/01/08/2016-01-08-wo-de-railskai-fa-zong-jie/" data-id="cknsp8yzb000e145ygssy3f1i" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2016/01/08/2016-01-08-wo-de-railskai-fa-zong-jie/" data-id="ckzihch26000e939kgcve69nz" class="article-share-link">分享</a>
       
       
       
@@ -667,7 +745,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2015/11/30/2015-11-30-develop-new-app-step/" data-id="cknsp8yza000c145y68zv74xc" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2015/11/30/2015-11-30-develop-new-app-step/" data-id="ckzihch24000a939kcbxie0y3" class="article-share-link">分享</a>
       
       
       
@@ -723,65 +801,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2015/03/05/2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/" data-id="cknsp8yzd000g145y5vet7cke" class="article-share-link">分享</a>
+      <a data-url="http://example.com/2015/03/05/2015-03-05-mysql5-dot-5an-zhuang-yu-pei-zhi-fang-fa/" data-id="ckzihch26000c939k98mq9b33" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-2014-10-05-railszhong-strack-loop-too-deepwen-ti-de-jie-jue" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/05/2014-10-05-railszhong-strack-loop-too-deepwen-ti-de-jie-jue/" class="article-date">
-  <time datetime="2014-10-05T02:16:12.000Z" itemprop="datePublished">2014-10-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/05/2014-10-05-railszhong-strack-loop-too-deepwen-ti-de-jie-jue/">rails中strack loop too deep 问题的解决</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>在将一个Rails3.1.2的应用升级到Rails4.0后，突然发现以前运行的好好的程序无法使用了，抛出”Stack loop too deep”这个异常。<br>雅美蝶！！！怎么可能，我这个地方又没使用递归，我瞬间打开IDE，找到了出问题的地方。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def transcation_in (detail, operator&#x3D;&#39;系统&#39;)</span><br><span class="line">  self.money &#x3D; self.money + detail.money</span><br><span class="line">  detail.account_type &#x3D; STATE[:in]</span><br><span class="line">  detail.updateby &#x3D; operator</span><br><span class="line">  detail.save</span><br><span class="line">  self.account_details &lt;&lt; detail</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-<p>如代码所见，逻辑很简单，就是对一个Model对象的简单保存，并加入到关联对象中。这哪里会出现堆栈太深呢。</p>
-<p>随后我加入了调试日志</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def transcation_in (detail, operator&#x3D;&#39;系统&#39;)</span><br><span class="line">  puts &#39;start transcation_in&#39;</span><br><span class="line">  begin</span><br><span class="line">    self.money &#x3D; self.money + detail.money</span><br><span class="line">    detail.account_type &#x3D; STATE[:in]</span><br><span class="line">    detail.updateby &#x3D; operator</span><br><span class="line">    detail.save</span><br><span class="line">    self.account_details &lt;&lt; detail</span><br><span class="line">  rescue Exception &#x3D;&gt; e</span><br><span class="line">    puts &quot;&#x3D;&#x3D;&#x3D;&#x3D;#&#123;e&#125;&quot;</span><br><span class="line">  end</span><br><span class="line">  puts &#39;end transcation_in&#39;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-
-<p>查看了日志，异常是在执行“detail.save”这个代码的是报的异常。这明明很正常呢。。。。日怪了。</p>
-<p>调试日志看不出东西来，那我就进入了debugger模式，发现执行到这一步时，进入了active_record.transactions.rb这个类里面的save方法，但我没开启事务呢。难道是因为方法名字的问题？？？这有点扯蛋了。。。</p>
-<p>我查看了我的Mysql数据表，确实是MyISAM引擎，改成InnoDB试试？尼玛，成功了！！！这里果然用了事务，当数据库表不支持事务时，就抛出了异常！！！</p>
-<p>这错误异常信息也太扯蛋了嘛，提示和事务一点关系也没有！</p>
-<p>希望这篇文章能为遇到同类问题的人提供解决办法，但问题的根源我还是没找到，为什么会用到事务了呢。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2014/10/05/2014-10-05-railszhong-strack-loop-too-deepwen-ti-de-jie-jue/" data-id="cknsp8yz70009145yetmt1cnx" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rails/" rel="tag">rails</a></li></ul>
 
     </footer>
   </div>
@@ -830,7 +854,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Docker/" style="font-size: 14px;">Docker</a> <a href="/tags/Jetty/" style="font-size: 14px;">Jetty</a> <a href="/tags/Rails-%E5%BC%80%E5%8F%91/" style="font-size: 14px;">Rails, 开发</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/java-weixin/" style="font-size: 14px;">java, weixin</a> <a href="/tags/mysql/" style="font-size: 14px;">mysql</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/rails/" style="font-size: 25px;">rails</a> <a href="/tags/spring-nacos-sentinel/" style="font-size: 14px;">spring, nacos, sentinel</a> <a href="/tags/varnish/" style="font-size: 14px;">varnish</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 14px;">开发</a>
+      <a href="/tags/Docker/" style="font-size: 14px;">Docker</a> <a href="/tags/Java-Spock/" style="font-size: 14px;">Java,Spock</a> <a href="/tags/Jetty/" style="font-size: 14px;">Jetty</a> <a href="/tags/Rails-%E5%BC%80%E5%8F%91/" style="font-size: 14px;">Rails, 开发</a> <a href="/tags/java/" style="font-size: 14px;">java</a> <a href="/tags/java-weixin/" style="font-size: 14px;">java, weixin</a> <a href="/tags/mysql/" style="font-size: 14px;">mysql</a> <a href="/tags/nginx/" style="font-size: 14px;">nginx</a> <a href="/tags/rails/" style="font-size: 25px;">rails</a> <a href="/tags/spring-nacos-sentinel/" style="font-size: 14px;">spring, nacos, sentinel</a> <a href="/tags/varnish/" style="font-size: 14px;">varnish</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 14px;">开发</a>
     </div>
   </div>
 
@@ -840,6 +864,10 @@
     <h3 class="widget-title recent-posts">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/">Spock实践</a>
+          </li>
         
           <li>
             <a href="/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/">uni-app 包装H5项目集成微信登录支付和分享</a>
@@ -857,10 +885,6 @@
             <a href="/2021/04/22/2021%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/">2021学习计划</a>
           </li>
         
-          <li>
-            <a href="/2016/02/26/2016-02-26-learn-docker/">学习Docker</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -870,7 +894,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -909,7 +933,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2021 karidyang&nbsp;|&nbsp;
+      &copy; 2014 - 2022 karidyang&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Spock实践 | 逆水前行</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Spock是什么？Spock是一款国外优秀的测试框架，基于BDD（行为驱动开发）思想实现，功能非常强大。Spock结合Groovy动态语言的特点，提供了各种标签，并采用简单、通用、结构化的描述语言，让编写测试代码更加简洁、高效。官方的介绍如下：   What is it? Spock is a testing and specification framework for Java and Gro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spock实践">
+<meta property="og:url" content="http://example.com/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="逆水前行">
+<meta property="og:description" content="Spock是什么？Spock是一款国外优秀的测试框架，基于BDD（行为驱动开发）思想实现，功能非常强大。Spock结合Groovy动态语言的特点，提供了各种标签，并采用简单、通用、结构化的描述语言，让编写测试代码更加简洁、高效。官方的介绍如下：   What is it? Spock is a testing and specification framework for Java and Gro">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p0.meituan.net/travelcube/4403846a46a805b9cf304187317da94a52377.png">
+<meta property="og:image" content="https://blog-img.taoguli.com/img/image-20220211215607514.png">
+<meta property="article:published_time" content="2022-02-11T09:55:47.000Z">
+<meta property="article:modified_time" content="2022-02-11T13:59:02.614Z">
+<meta property="article:author" content="karidyang">
+<meta property="article:tag" content="Java,Spock">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p0.meituan.net/travelcube/4403846a46a805b9cf304187317da94a52377.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">逆水前行</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Spock实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2022-02-11T09:55:47.000Z" itemprop="datePublished">2022-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Spock实践
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="Spock是什么？"><a href="#Spock是什么？" class="headerlink" title="Spock是什么？"></a>Spock是什么？</h2><p>Spock是一款国外优秀的测试框架，基于<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>（行为驱动开发）思想实现，功能非常强大。Spock结合Groovy动态语言的特点，提供了各种标签，并采用简单、通用、结构化的描述语言，让编写测试代码更加简洁、高效。<a target="_blank" rel="noopener" href="https://spockframework.org/">官方的介绍</a>如下：</p>
+<p><img src="https://p0.meituan.net/travelcube/4403846a46a805b9cf304187317da94a52377.png" alt="img"></p>
+<blockquote>
+<p>What is it? Spock is a testing and specification framework for Java and Groovy applications. What makes it stand out from the crowd is its beautiful and highly expressive specification language. Thanks to its JUnit runner, Spock is compatible with most IDEs, build tools, and continuous integration servers. Spock is inspired from JUnit, RSpec, jMock, Mockito, Groovy, Scala, Vulcans, and other fascinating life forms.</p>
+</blockquote>
+<p>Spock是一个Java和Groovy`应用的测试和规范框架。之所以能够在众多测试框架中脱颖而出，是因为它优美而富有表现力的规范语言。Spock的灵感来自JUnit、RSpec、jMock、Mockito、Groovy、Scala、Vulcans。</p>
+<p>简单来讲，Spock主要特点如下：</p>
+<ul>
+<li>让测试代码更规范，内置多种标签来规范单元测试代码的语义，测试代码结构清晰，更具可读性，降低后期维护难度。</li>
+<li>提供多种标签，比如：<code>given</code>、<code>when</code>、<code>then</code>、<code>expect</code>、<code>where</code>、<code>with</code>、<code>thrown</code>……帮助我们应对复杂的测试场景。</li>
+<li>使用Groovy这种动态语言来编写测试代码，可以让我们编写的测试代码更简洁，适合敏捷开发，提高编写单元测试代码的效率。</li>
+<li>遵从<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>（行为驱动开发）模式，有助于提升代码的质量。</li>
+<li>IDE兼容性好，自带Mock功能。</li>
+</ul>
+<p>笔者以前实践过PowerMock、Mockito，比原来的Junit好多了，但是现在都是使用的SpringBoot开发项目，大部分的类都是Spring的Bean，使用PowerMock对类Mock并不是很好用，测试起来也算是很麻烦了，那么Spock真的好用吗？</p>
+<p>笔者从美团的技术博客上了解到<a href="#%5BSpock%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E7%BE%8E%E5%9B%A2%E4%BC%98%E9%80%89%E7%9A%84%E5%AE%9E%E8%B7%B5%5D(https://tech.meituan.com/2021/08/06/spock-practice-in-meituan.html)">Spock的实际使用</a>,因此在团队中，我也实践了一把。基本的使用方法，美团的技术文章已经讲的很明白了，那我就讲点不一样的。</p>
+<h2 id="基于Gradle的项目配置"><a href="#基于Gradle的项目配置" class="headerlink" title="基于Gradle的项目配置"></a>基于Gradle的项目配置</h2><p>基于kotlin的Gradle配置build.gradle.kts</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">  <span class="comment">//引入gradle的Groovy插件</span></span><br><span class="line">	groovy</span><br><span class="line">  <span class="comment">//使用jacoco生成测试报告</span></span><br><span class="line">  jacoco</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> spockVersion = <span class="string">&quot;2.0-groovy-2.5&quot;</span></span><br><span class="line">project &#123;</span><br><span class="line">  apply(plugin = <span class="string">&quot;groovy&quot;</span>)</span><br><span class="line">  apply(plugin = <span class="string">&quot;jacoco&quot;</span>)</span><br><span class="line">  </span><br><span class="line">  dependencies &#123;</span><br><span class="line">    </span><br><span class="line">  	testImplementation(<span class="string">&quot;org.codehaus.groovy:groovy:2.5.9&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;org.jetbrains.kotlin:kotlin-test-junit5&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;junit:junit&quot;</span>)</span><br><span class="line">    testImplementation(<span class="string">&quot;org.springframework.boot:spring-boot-starter-test&quot;</span>) &#123;</span><br><span class="line">       exclude(group = <span class="string">&quot;org.junit.vintage&quot;</span>, module = <span class="string">&quot;junit-vintage-engine&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    testImplementation(<span class="string">&quot;org.spockframework:spock-core:<span class="variable">$spockVersion</span>&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//配置测试源代码目录加上groovy的</span></span><br><span class="line">  sourceSets &#123;</span><br><span class="line"></span><br><span class="line">        test &#123;</span><br><span class="line">            java &#123;srcDirs(<span class="string">&quot;src/test/java&quot;</span>, <span class="string">&quot;src/test/groovy&quot;</span>)&#125;</span><br><span class="line">            resources &#123; srcDir(<span class="string">&quot;src/test/resources&quot;</span>) &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">//配置jacoco</span></span><br><span class="line">    tasks.test &#123;</span><br><span class="line">        finalizedBy(tasks.jacocoTestReport)</span><br><span class="line">    &#125;</span><br><span class="line">    tasks.jacocoTestReport &#123;</span><br><span class="line">        dependsOn(tasks.test)</span><br><span class="line">    &#125;</span><br><span class="line">    tasks.withType&lt;Test&gt; &#123;</span><br><span class="line">        useJUnitPlatform()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Mock模拟"><a href="#Mock模拟" class="headerlink" title="Mock模拟"></a>Mock模拟</h2><p>我们的项目现在使用的是Kotlin，Kotlin的类默认是final的，Mock时需要修改类为open，比如</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">open</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果标记了Spring的Bean注解（@Service@Repository@Component)等，其实是默认已经修改过了，不需要额外去标记。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FinLogisticsDeductionSpec</span> <span class="title">extends</span> <span class="title">Specification</span> </span>&#123;</span><br><span class="line">    def finLogisticsAccountService = Mock(FinLogisticsAccountService.<span class="keyword">class</span>)</span><br><span class="line">    def finLogisticsDeduction  = new FinLogisticsDeductionAdvanceImpl(finLogisticsAccountService: finLogisticsAccountService)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def <span class="string">&quot;测试 消费&quot;</span>() &#123;</span><br><span class="line">        def req = new FinLogisticsDeductionExecBO(amount: new BigDecimal(<span class="number">100</span>))</span><br><span class="line">        given: <span class="string">&quot;设置消费现金100&quot;</span></span><br><span class="line">        def cash = new BigDecimal(<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        and: <span class="string">&quot;扣费服务返回扣费现金100&quot;</span></span><br><span class="line">        finLogisticsAccountService.deduction(req, LogisticsAccountType.ADVANCE) &gt;&gt; cash</span><br><span class="line"></span><br><span class="line">        <span class="keyword">when</span>: <span class="string">&quot;扣费&quot;</span></span><br><span class="line">        def result = finLogisticsDeduction.exec(req)</span><br><span class="line"></span><br><span class="line">        then: <span class="string">&quot;期望结果&quot;</span></span><br><span class="line">        with(result) &#123;</span><br><span class="line">            it == cash</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="多分支条件测试"><a href="#多分支条件测试" class="headerlink" title="多分支条件测试"></a>多分支条件测试</h2><p>项目中经常会遇到同一个方法里面有多个if-else分支的情况，通过Spock的where标签可以非常容易的实现这个。方法名中的#amount，是直接在字符串模板中显示变量的值，可以更直观的显示在测试结果中。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Unroll</span></span><br><span class="line">def <span class="string">&quot;扣费:#amount 当用户现金是:#account.availableCashAmount,红包是:#account.availableAwardAmount, 扣费后现金余额:#cash, 红包余额:#award, 返回剩余金额:#expectResult &quot;</span>() &#123;</span><br><span class="line">    given:</span><br><span class="line">    def bo = new FinLogisticsDeductionExecBO(amount: amount, fromCompanyId: <span class="number">1</span>, comment: <span class="string">&quot;订单扣费&quot;</span>, deductedAfterRecharge: deductedAfterRecharge, billId: <span class="number">1</span>, billNo: <span class="string">&quot;1234546&quot;</span>)</span><br><span class="line">    and:</span><br><span class="line">    finLogisticsAccountItemRepository.selectUnusedList(account.id, <span class="literal">false</span>) &gt;&gt; accountItems</span><br><span class="line">    securityUtils.currentUser() &gt;&gt; currentUser</span><br><span class="line">    finLogisticsAccountItemRepository.updateById(_ <span class="keyword">as</span> FinLogisticsAccountItemEntity) &gt;&gt; <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">when</span>: <span class="string">&quot;扣现金&quot;</span></span><br><span class="line">    def result = tester.loopDeduction(account, bo)</span><br><span class="line"></span><br><span class="line">    then:</span><br><span class="line">    with(result) &#123;</span><br><span class="line">        expectResult == it</span><br><span class="line">        accountItems[<span class="number">0</span>].availableCashBalance == cash</span><br><span class="line">        accountItems[<span class="number">0</span>].availableAwardBalance == award</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">where</span>: <span class="string">&quot;验证分支&quot;</span></span><br><span class="line">    amount | currentUser     | account                | accountItems                | deductedAfterRecharge || cash | award | expectResult</span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">10000</span>, <span class="number">0</span>)   | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)   | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">0</span>, <span class="number">10000</span>)   | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)   | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">5000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">5000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">4000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">4000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">1000</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">0</span>    | <span class="number">1000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">10000</span>, <span class="number">0</span>)   | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)   | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">0</span>, <span class="number">10000</span>)   | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)   | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | currentUser()   | getAccount(<span class="number">5000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">5000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">0</span></span><br><span class="line">    <span class="number">10000</span>  | new AuditData() | getAccount(<span class="number">4000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">4000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">1000</span></span><br><span class="line">    <span class="number">10000</span>  | new AuditData() | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">1000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">0</span>      | <span class="literal">null</span>            | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">true</span>                   | <span class="number">6000</span> | <span class="number">5000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">0</span>      | <span class="literal">null</span>            | getAccount(<span class="number">6000</span>, <span class="number">5000</span>) | getAccountItems(<span class="number">6000</span>, <span class="number">5000</span>) | <span class="literal">false</span>                  | <span class="number">6000</span> | <span class="number">5000</span>  | <span class="number">0</span></span><br><span class="line">    <span class="number">100</span>    | <span class="literal">null</span>            | getAccount(<span class="number">0</span>, <span class="number">0</span>)       | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)       | <span class="literal">false</span>                  | <span class="number">0</span>    | <span class="number">0</span>     | <span class="number">100</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://blog-img.taoguli.com/img/image-20220211215607514.png" alt="image-20220211215607514"></p>
+<h2 id="异常测试"><a href="#异常测试" class="headerlink" title="异常测试"></a>异常测试</h2><p>对于方法逻辑中会抛出异常的逻辑，可以通过thrown(异常变量)方法来获取异常错误，比如：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Unroll</span></span><br><span class="line">    def <span class="string">&quot;测试退款现金不足 #expectedMessage&quot;</span>() &#123;</span><br><span class="line">        given:</span><br><span class="line">        def bo = new FinLogisticsRefundExecBO(cashAmount: cashAmount, awardAmount: awardAmount, fromCompanyId: <span class="number">1</span>, comment: <span class="string">&quot;订单扣费&quot;</span>, billId: <span class="number">1</span>, billNo: <span class="string">&quot;1234546&quot;</span>)</span><br><span class="line">        def account = new FinLogisticsAccountEntity(id: <span class="number">1</span>)</span><br><span class="line">        and:</span><br><span class="line">        finLogisticsAccountItemRepository.selectUnusedList(account.id, <span class="literal">false</span>) &gt;&gt; accountItems</span><br><span class="line">        securityUtils.currentUser() &gt;&gt; currentUser</span><br><span class="line"></span><br><span class="line">        <span class="keyword">when</span>:</span><br><span class="line">        tester.loopRefund(account, bo)</span><br><span class="line">        then:</span><br><span class="line">        def exception = thrown(expectedException)</span><br><span class="line">        exception.message == expectedMessage</span><br><span class="line"></span><br><span class="line">        <span class="keyword">where</span>: <span class="string">&quot;验证分支&quot;</span></span><br><span class="line">        cashAmount | awardAmount | currentUser   | accountItems                  || expectedException | expectedMessage</span><br><span class="line">        <span class="number">20000</span>      | <span class="number">0</span>           | currentUser() | getAccountItems(<span class="number">10000</span>, <span class="number">0</span>)     || BaseException     | <span class="string">&quot;退款出错，现金金额不能大于账户现金余额&quot;</span></span><br><span class="line">        <span class="number">20000</span>      | <span class="number">0</span>           | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)         || BaseException     | <span class="string">&quot;退款出错，现金金额不能大于账户现金余额&quot;</span></span><br><span class="line">        <span class="number">0</span>          | <span class="number">20000</span>       | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">10000</span>)     || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line">        <span class="number">10000</span>      | <span class="number">11000</span>       | currentUser() | getAccountItems(<span class="number">10000</span>, <span class="number">10000</span>) || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line">        <span class="number">0</span>          | <span class="number">100</span>         | currentUser() | getAccountItems(<span class="number">0</span>, <span class="number">0</span>)         || BaseException     | <span class="string">&quot;退款出错，红包金额不能大于账户红包余额&quot;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/02/11/Spock%E5%AE%9E%E8%B7%B5/" data-id="ckzihch2a000m939k39dp9qit" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-Spock/" rel="tag">Java,Spock</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/04/23/uni-app-%E5%8C%85%E8%A3%85H5%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90%E5%BE%AE%E4%BF%A1%E7%99%BB%E5%BD%95%E6%94%AF%E4%BB%98%E5%92%8C%E5%88%86%E4%BA%AB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">uni-app 包装H5项目集成微信登录支付和分享</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spock%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Spock是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EGradle%E7%9A%84%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">基于Gradle的项目配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mock%E6%A8%A1%E6%8B%9F"><span class="toc-number">3.</span> <span class="toc-text">Mock模拟</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%88%86%E6%94%AF%E6%9D%A1%E4%BB%B6%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">多分支条件测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%B5%8B%E8%AF%95"><span class="toc-number">5.</span> <span class="toc-text">异常测试</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2022 karidyang&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;karidyang@gmail.com
+    </div>
+  </div>
+</footer>
+ 
+<script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ 
+<script src="/js/is.js"></script>
+
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/elevator.js"></script>
+
+  </div>
+</body>
+</html>
